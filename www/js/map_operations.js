@@ -1,12 +1,33 @@
-/*global L*/
+/*global L,$*/
+var map;
+function onLocationFound(e) {
+    "use strict";
+    var radius = e.accuracy / 2;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("Vous êtes ici").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+function configurerCssMap() {
+   "use strict";
+    $("#map").height($(window).height()).width($(window).width());
+}
+
 function initMap() {
     "use strict";
-    
-    var map = L.map('map').setView([46.80, -71.23], 11);
+    configurerCssMap();
+    map = L.map('map').setView([46.80, -71.23], 11);
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
     }).addTo(map);
     
+    // Bind la methode après locate...
+    map.on('locationfound', onLocationFound);
+    
     map.locate({setView: true, maxZoom: 14, enableHighAccuracy: true});
+
 }
+
