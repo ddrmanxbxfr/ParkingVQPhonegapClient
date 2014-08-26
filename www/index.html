@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>ParkingVQ</title>
+    <link rel="stylesheet" href="css/topcoat-mobile-dark.min.css" />
+</head>
+
+
+<body>
+    <div class="topcoat-navigation-bar center">
+        <div class="topcoat-navigation-bar__item">
+            <h1 class="topcoat-navigation-bar__title">ParkingVQ</h1>
+        </div>
+    </div>
+    <div id="main-content">
+        <h3>La place pour trouver le meilleur stationnement.</h3>
+        <p>Plus de probleme a trouver un stationnement.</p>
+        <p>Il suffit de selectionner une option ci-dessous !</p>
+    </div>
+
+    <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button id="tab1" class="topcoat-tab-bar__button full" id="btnInfo">Information</button>
+        </label>
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnAskParking">Stationnement ok ?</button>
+        </label>
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnShowMap">Carte des parkings</button>
+        </label>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="application/javascript" src="js/fastclick.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            FastClick.attach(document.body);
+            }, false);        
+        
+        // Ce script change le contenu disponible !
+        $('#btnInfo').click(function () {
+            $('#main-content').html('Puppies');
+        });
+
+        $('#btnAskParking').click(function () {
+            $('#main-content').html('Kittens');
+        });
+
+        $('#btnShowMap').click(function () {
+            $('#main-content').html('Aardvark');
+        });
+    </script>
+</body>
+
+</html>
