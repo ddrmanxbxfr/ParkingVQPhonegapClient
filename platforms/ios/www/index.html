@@ -18,27 +18,44 @@
             <h1 class="topcoat-navigation-bar__title">ParkingVQ</h1>
         </div>
     </div>
-    <div class="main-content">
-    <p>Welcome to Quebec City's premiere parking verification app.</p>
+    <div id="main-content">
+       
     </div>
-    
-     <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
-            <label class="topcoat-tab-bar__item">
-                <input type="radio" name="topcoat">
-                <button id="tab1" class="topcoat-tab-bar__button full" onclick="app.showView('button-bar-tpl')">Information</button>
-            </label>
-            <label class="topcoat-tab-bar__item">
-                <input type="radio" name="topcoat">
-                <button class="topcoat-tab-bar__button full" onclick="app.showView('overlay')">Stationnement ok ?</button>
-            </label>
-            <label class="topcoat-tab-bar__item">
-                <input type="radio" name="topcoat">
-                <button class="topcoat-tab-bar__button full" onclick="app.showView('controls-tpl')">Carte des parkings</button>
-            </label>
-        </div>
-    
+
+    <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnInfo">Information</button>
+        </label>
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnAskParking">Stationnement ok ?</button>
+        </label>
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnShowMap">Carte des parkings</button>
+        </label>
+    </div>
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/fastclick.js"></script>
+    <script type="text/javascript" src="js/zepto.min.js"></script>
     <script type="text/javascript">
+        window.addEventListener('load', function() {
+            FastClick.attach(document.body);
+            }, false);        
+        
+        // Ce script change le contenu disponible !
+        $('#btnInfo').click(function () {
+            $('#main-content').html("<div class=\"center\"><h3>La place pour trouver le meilleur stationnement.</h3><p>Plus de probleme a trouver un stationnement.</p><p>Il suffit de selectionner une option ci-dessous </p></div>");
+        });
+
+        $('#btnAskParking').click(function () {
+            $('#main-content').html('<h3 class="center">Localisation en cours</h3><p class="center">Nous sommes à la recherche de vous avec une paire de loupe.</p>');
+        });
+
+        $('#btnShowMap').click(function () {
+            $('#main-content').html('<div id="map"></div>');
+        });
     </script>
 </body>
 
