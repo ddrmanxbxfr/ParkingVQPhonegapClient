@@ -19,12 +19,12 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
-    <name>HelloWorld</name>
+    <name>ParkingVQ</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        ParkingVQ est une application qui fournit un support au citoyen concernant les parking de la Ville de Québec.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="support@apes.com" href="http://apes.com">
+        APES
     </author>
     <preference name="permissions" value="none" />
     <preference name="phonegap-version" value="3.5.0" />

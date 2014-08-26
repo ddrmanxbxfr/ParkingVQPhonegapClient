@@ -9,6 +9,8 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <title>ParkingVQ</title>
     <link rel="stylesheet" href="css/topcoat-mobile-dark.min.css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/map_div.css" />
 </head>
 
 
@@ -19,8 +21,10 @@
         </div>
     </div>
     <div id="main-content">
-       
+
     </div>
+    
+    <div id="map"></div>
 
     <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
         <label class="topcoat-tab-bar__item">
@@ -39,12 +43,22 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/fastclick.js"></script>
     <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/leaflet.js"></script>
     <script type="text/javascript">
-        window.addEventListener('load', function() {
-            FastClick.attach(document.body);
-            }, false);        
         
-        // Ce script change le contenu disponible !
+        function initMap() {
+             var map = L.map('map').setView([46.80, -71.23], 11);
+
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+            }).addTo(map);
+        };
+        
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+
+         // Ce script change le contenu disponible !
         $('#btnInfo').click(function () {
             $('#main-content').html("<div class=\"center\"><h3>La place pour trouver le meilleur stationnement.</h3><p>Plus de probleme a trouver un stationnement.</p><p>Il suffit de selectionner une option ci-dessous </p></div>");
         });
@@ -54,7 +68,9 @@
         });
 
         $('#btnShowMap').click(function () {
-            $('#main-content').html('<div id="map"></div>');
+            $('#main-content').html("<div id=\"map\"></div><script>initMap();<\/script>");
+           
+
         });
     </script>
 </body>
