@@ -11,7 +11,7 @@ function onLocationFound(e) {
 }
 
 function configurerCssMap() {
-   "use strict";
+    "use strict";
     $("#map").height($(window).height()).width($(window).width());
 }
 
