@@ -11,14 +11,16 @@ function clearWaypoints() {
 function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
     "use strict";
     var geojsonFeature, geoJsonToShow, url;
-    if (geoJsonLayer !== null) {
+    if (geoJsonLayer != null) {
         clearWaypoints();
     }
 
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
     url = "http://localhost:4711/api/parking/" + radiusTarget + "/" + latlngLocs.lat + "/" + latlngLocs.lng;
-    //  console.log(url);
+    
+    
+      console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,

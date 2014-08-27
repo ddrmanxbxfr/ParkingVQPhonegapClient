@@ -212,3 +212,14 @@ You could find it at the following address https://developer.apple.com/icloud/do
 
 2014-08-27 17:47:08.616 ParkingVQ[19461:70b] Resetting plugins due to page load.
 2014-08-27 17:47:08.983 ParkingVQ[19461:70b] Finished load of: file:///Users/ddrmanxbxfr/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/A2D269E1-4768-4D95-9A2A-5731A1D6B25F/ParkingVQ.app/www/index.html
+2014-08-27 18:45:07.690 ParkingVQ[20256:70b] Multi-tasking -> Device: YES, App: YES
+2014-08-27 18:45:07.735 ParkingVQ[20256:70b] Unlimited access to network resources
+2014-08-27 18:45:07.744 ParkingVQ[20256:70b] 
+
+Started backup to iCloud! Please be careful.
+Your application might rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines"
+You could find it at the following address https://developer.apple.com/icloud/documentation/data-storage/ .
+
+2014-08-27 18:45:08.478 ParkingVQ[20256:70b] Resetting plugins due to page load.
+2014-08-27 18:45:08.874 ParkingVQ[20256:70b] Finished load of: file:///Users/ddrmanxbxfr/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/A2D269E1-4768-4D95-9A2A-5731A1D6B25F/ParkingVQ.app/www/index.html
