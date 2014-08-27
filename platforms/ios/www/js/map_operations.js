@@ -21,7 +21,7 @@ function initMap() {
     map = L.map('map').setView([46.80, -71.23], 11);
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; Powered by APES, Thanks to OSM/Leaflet for tiles and maps'
+
     }).addTo(map);
     
     // Bind la methode après locate...
