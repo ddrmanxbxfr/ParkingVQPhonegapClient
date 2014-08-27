@@ -1,22 +1,6 @@
 /*global L,$*/
 var map, geoJsonLayer;
 
-
-function onLocationFound(e) {
-    "use strict";
-    var radius = e.accuracy / 2;
-
-    L.marker(e.latlng).addTo(map)
-        .bindPopup("Vous êtes ici").openPopup();
-
-    L.circle(e.latlng, radius).addTo(map);
-}
-
-function configurerCssMap() {
-    "use strict";
-    $("#map").height($(window).height()).width($(window).width());
-}
-
 function clearWaypoints() {
     "use strict";
     if (geoJsonLayer !== null) {
@@ -24,8 +8,7 @@ function clearWaypoints() {
     }
 }
 
-
-function ajouterWaypointsRadius(waypointKey, radiusTarget, latlngLocs) {
+function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
     "use strict";
     var geojsonFeature, geoJsonToShow, url;
     if (geoJsonLayer !== null) {
@@ -34,7 +17,7 @@ function ajouterWaypointsRadius(waypointKey, radiusTarget, latlngLocs) {
 
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://127.0.0.1:4711/api/geojson/" + waypointKey + "/" + radiusTarget + "/" + latlngLocs.lat + "/" + latlngLocs.lng;
+    url = "http://localhost:4711/api/parking/" + radiusTarget + "/" + latlngLocs.lat + "/" + latlngLocs.lng;
     //  console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
@@ -44,6 +27,23 @@ function ajouterWaypointsRadius(waypointKey, radiusTarget, latlngLocs) {
         };
         geoJsonLayer = L.geoJson(geoJsonToShow).addTo(map);
     });
+}
+
+function onLocationFound(e) {
+    "use strict";
+    var radius = e.accuracy / 2;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("Vous êtes ici").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+    
+    ajouterWaypointsRadius(10, map.getCenter());
+}
+
+function configurerCssMap() {
+    "use strict";
+    $("#map").height($(window).height()).width($(window).width());
 }
 
 function initMap() {
