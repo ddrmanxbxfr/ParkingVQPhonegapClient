@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>ParkingVQ</title>
+    <link rel="stylesheet" href="css/topcoat-mobile-dark.css" />
+    <link rel="stylesheet" href="css/pacifico_font.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="css/index.css" type="text/css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+</head>
+
+
+<body>
+    <div class="topcoat-navigation-bar center">
+        <div class="topcoat-navigation-bar__item">
+            <h1 class="topcoat-navigation-bar__title" id="titleTopBar">Stationne moi</h1>
+        </div>
+    </div>
+    <div id="main-content">
+
+    </div>
+
+    <div id="map"></div>
+
+    <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnAskParking">Légende</button>
+        </label>
+        <label class="topcoat-tab-bar__item">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full" id="btnShowMap">Carte</button>
+        </label>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/fastclick.js"></script>
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/leaflet.js"></script>
+    <script type="text/javascript" src="js/leaflet.markercluster-src.js"></script>
+    <script type="text/javascript" src="js/map_operations.js"></script>
+    <script type="text/javascript" src="js/setEvents.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+        templateShowMap();
+    </script>
+</body>
+
+</html>

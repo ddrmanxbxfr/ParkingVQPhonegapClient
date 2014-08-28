@@ -1,0 +1,9 @@
+#titleTopBar ,.topcoat-tab-bar__button{
+    font-family: 'pacificoregular', Arial, sans-serif;
+    font-size: 225%;
+    color: #E34C00;
+}
+
+body, .topcoat-navigation-bar, .topcoat-tab-bar__button{
+ background-color: #FFB900;
+}
