@@ -1,4 +1,4 @@
-/*global L,$*/
+/*global L,$,console*/
 var map, geoJsonLayer;
 
 function clearWaypoints() {
@@ -8,19 +8,57 @@ function clearWaypoints() {
     }
 }
 
-function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
+
+function trouverCenterFromBounds(h1, h2, b1, b2) {
     "use strict";
-    var geojsonFeature, geoJsonToShow, url;
+    var ih1, ih2, ib1, ib2, centreH, centreB, point;
+    ih1 = parseFloat(h1);
+    ih2 = parseFloat(h2);
+    ib1 = parseFloat(b1);
+    ib2 = parseFloat(b2);
+
+    centreH = (ih1 + ih2) / 2;
+    centreB = (ib1 + ib2) / 2;
+    point = {
+        lat: centreH,
+        lng: centreB
+    };
+    return point;
+}
+
+function ajouterWaypointsBounds(latlngBounds) {
+    var url, geojsonFeature, geoJsonToShow;
     if (geoJsonLayer != null) {
         clearWaypoints();
     }
 
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://localhost:4711/api/parking/" + radiusTarget + "/" + latlngLocs.lat + "/" + latlngLocs.lng;
-    
-    
-      console.log(url);
+    url = "http://127.0.0.1:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+    console.log(url);
+    $.getJSON(url, function (data) {
+        geoJsonToShow = {
+            "features": data.features,
+            "name": data.name,
+            "type": data.type
+        };
+        geoJsonLayer = L.geoJson(geoJsonToShow).addTo(map);
+    });
+};
+
+function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
+    "use strict";
+    var geojsonFeature, geoJsonToShow, url, pointCentral;
+    if (geoJsonLayer != null) {
+        clearWaypoints();
+    }
+
+    pointCentral = trouverCenterFromBounds(latlngLocs._southWest.lat, latlngLocs._northEast.lat, latlngLocs._southWest.lng, latlngLocs._northEast.lng);
+    console.log('lat :' + pointCentral.lat + ' lng: ' + pointCentral.lng);
+    geojsonFeature = new L.GeoJSON();
+    geoJsonToShow = {};
+    url = "http://127.0.0.1:4711/api/parking/" + radiusTarget + "/" + pointCentral.lat + "/" + pointCentral.lng;
+    //  console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,
@@ -39,13 +77,18 @@ function onLocationFound(e) {
         .bindPopup("Vous êtes ici").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
-    
-    ajouterWaypointsRadius(10, map.getCenter());
+    ajouterWaypointsBounds(map.getBounds());
 }
 
 function configurerCssMap() {
     "use strict";
     $("#map").height($(window).height()).width($(window).width());
+}
+
+
+function refreshMap() {
+    "use strict";
+    ajouterWaypointsBounds(map.getBounds());
 }
 
 function initMap() {
@@ -59,10 +102,10 @@ function initMap() {
 
     // Bind la methode après locate...
     map.on('locationfound', onLocationFound);
-
+    map.on('dragend', refreshMap);
     map.locate({
         setView: true,
-        maxZoom: 14,
+        maxZoom: 16,
         enableHighAccuracy: true
     });
 }
