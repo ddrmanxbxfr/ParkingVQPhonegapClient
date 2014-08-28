@@ -34,7 +34,7 @@ function ajouterWaypointsBounds(latlngBounds) {
 
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://127.0.0.1:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+    url = "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
     console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
@@ -57,7 +57,7 @@ function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
     console.log('lat :' + pointCentral.lat + ' lng: ' + pointCentral.lng);
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://127.0.0.1:4711/api/parking/" + radiusTarget + "/" + pointCentral.lat + "/" + pointCentral.lng;
+    url = "http://vps84512.ovh.net:4711/api/parking/" + radiusTarget + "/" + pointCentral.lat + "/" + pointCentral.lng;
     //  console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
