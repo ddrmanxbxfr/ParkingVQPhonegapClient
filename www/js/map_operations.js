@@ -102,7 +102,11 @@ function initMap() {
 
     // Bind la methode après locate...
     map.on('locationfound', onLocationFound);
+    // Methodes lorsque le user deplace la map...
     map.on('dragend', refreshMap);
+    map.on("zoomend", refreshMap);
+    
+    // Trouve moi donc où je suis !
     map.locate({
         setView: true,
         maxZoom: 16,
