@@ -8,7 +8,7 @@ function templateBtnInfo() {
 
 function templateShowMap() {
     "use strict";
-    $('#main-content').html("<div id=\"map\"></div><script>initMap();<\/script>");
+    $('#main-content').html("<div id=\"progress\"><div id=\"progress-bar\"></div></div><div id=\"map\"></div><script>initMap();<\/script>");
 }
 
 function templateAskParking() {
