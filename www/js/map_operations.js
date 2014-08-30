@@ -1,5 +1,22 @@
 /*global L,$,console*/
-var map, markers;
+var map, markers, locsLoadedInMemory;
+
+function evaluateIfIShouldLoadWaypointsFromApi(vs, swY, swX, neY, neX) {
+    "use strict";
+    var len, i, j, xj, yj, xi, yi;
+    len = vs.length;
+    for (i = 0, j = len - 1; i < len; j = i + 1) {
+        xi = vs[i][0];
+        yi = vs[i][1];
+        xj = vs[j][0];
+        yj = vs[j][1];
+        if ((neY > yi || swY > yj) &&
+                (neX < xj || swX < xi)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 function clearWaypoints() {
     "use strict";
@@ -45,7 +62,10 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             progress.style.display = 'none';
         }
     }
-    markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+    markers = L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkProgress: updateProgressBar
+    });
     markerList = [];
     lenFeatures = geojsonMarkers.features.length;
     for (i = 0; i < lenFeatures; i + 1) {
