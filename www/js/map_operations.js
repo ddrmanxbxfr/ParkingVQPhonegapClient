@@ -131,8 +131,8 @@ function initMap() {
     // Methodes lorsque le user deplace la map...
     map.on("dragstart", clearWaypoints);
     map.on("dragend", refreshMap);
-    map.on("zoomstart", clearWaypoints);
-    map.on("zoomend", refreshMap);
+   // map.on("zoomstart", clearWaypoints);
+//    map.on("zoomend", refreshMap);
 
     // Trouve moi donc où je suis !
     map.locate({
