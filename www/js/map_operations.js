@@ -5,18 +5,22 @@ var map, markers, locsLoadedInMemory;
 function evaluateIfIShouldLoadWaypointsFromApi(vs, swY, swX, neY, neX) {
     "use strict";
     var len, i, j, xj, yj, xi, yi;
-    len = vs.length;
-    for (i = 0, j = len - 1; i < len; j = i + 1) {
-        xi = locsLoadedInMemory.neX;
-        yi = locsLoadedInMemory.swX;
-        xj = locsLoadedInMemory.neY;
-        yj = locsLoadedInMemory.swY;
-        if ((neY > yi || swY > yj) &&
-                (neX < xj || swX < xi)) {
-            return true;
+    if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
+        len = vs.length;
+        for (i = 0, j = len - 1; i < len; j = i + 1) {
+            xi = locsLoadedInMemory.neX;
+            yi = locsLoadedInMemory.swX;
+            xj = locsLoadedInMemory.neY;
+            yj = locsLoadedInMemory.swY;
+            if ((neY > yi || swY > yj) &&
+                    (neX < xj || swX < xi)) {
+                return true;
+            }
         }
+        return false;
+    } else {
+        return false;
     }
-    return false;
 }
 
 function clearWaypoints() {
