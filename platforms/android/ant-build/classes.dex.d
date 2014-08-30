@@ -6,4 +6,6 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/classes/com/phonegap/helloworld/R$string.class \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/classes/com/phonegap/helloworld/R$xml.class \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/classes/com/phonegap/helloworld/R.class \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager$1.class \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager.class \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/ant-build/dexedLibs/classes-ddb504eacee17c0a0a6404d01e746d61.jar \

@@ -19,7 +19,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "org.apache.cordova.network-information": "0.2.12-dev"
+    "org.apache.cordova.network-information": "0.2.11"
 }
 // BOTTOM OF METADATA
 });

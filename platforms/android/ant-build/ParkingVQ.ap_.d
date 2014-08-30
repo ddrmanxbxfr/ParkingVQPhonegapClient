@@ -39,6 +39,7 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/index.html \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/phonegap.js \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/plugins \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/res \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/spec \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/spec.html \
@@ -99,6 +100,10 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/images/marker-icon-2x.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/images/marker-icon.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/images/marker-shadow.png \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/plugins/org.apache.cordova.network-information \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/Connection.js \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/plugins/org.apache.cordova.network-information/www/network.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/res/icon \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/res/screen \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/res/icon/android \
