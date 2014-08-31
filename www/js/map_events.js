@@ -21,7 +21,6 @@ function configurerCssMap() {
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
     var progressBar, progress, markerList, lenFeatures, marker, i, maxZoom;
-    clearWaypoints();
     progress = document.getElementById('progress');
     progressBar = document.getElementById('progress-bar');
 
@@ -50,6 +49,9 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
         markerList.push(marker);
     }
+
+    clearWaypoints();
+
     markers.addLayers(markerList);
     map.addLayer(markers);
 }

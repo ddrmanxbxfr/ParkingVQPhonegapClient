@@ -32,7 +32,13 @@ function updateLocsInMemory(latlngbounds) {
 function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
     if (isLocsLoadedInMemory()) {
-        if ((locsLoadedInMemory.swX > mapBounds._southWest.lng || locsLoadedInMemory.swY > mapBounds._southWest.lng) && (locsLoadedInMemory.neY < mapBounds._northEast.lat || locsLoadedInMemory.neX < mapBounds._northEast.lat)) {
+        if (
+            (mapBounds._southWest.lng > locsLoadedInMemory.swX ||
+             mapBounds._southWest.lat > locsLoadedInMemory.swY) && (
+                mapBounds._northEast.lat < locsLoadedInMemory.neY ||
+                mapBounds._northEast.lng < locsLoadedInMemory.neX
+            )
+        ) {
             return false;
         } else {
             return true;
