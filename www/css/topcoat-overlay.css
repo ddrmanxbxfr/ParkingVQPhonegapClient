@@ -55,9 +55,9 @@
 /* Progress bar */
 .topcoat-progress-bar {
     overflow: hidden;
-    width: 250px;
+    width: 90%;
     height: 1.25rem;
-    margin: 20px;
+    margin: 5%;
     border-radius: 12px;
     background-color: #d3d7d7;
     box-shadow: 0 1px rgba(255,255,255,0.25), inset 0 1px rgba(0,0,0,0.12);
