@@ -48,23 +48,6 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     return point;
 }
 
-function mettreAJoursBoundsCache(latlngBounds) {
-    "use strict";
-    if (locsLoadedInMemory !== undefined) {
-        locsLoadedInMemory.swY = latlngBounds._southWest.lat;
-        locsLoadedInMemory.swX = latlngBounds._southWest.lng;
-        locsLoadedInMemory.neY = latlngBounds._northEast.lat;
-        locsLoadedInMemory.neX = latlngBounds._northEast.lng;
-    } else {
-        locsLoadedInMemory = {
-            swY: latlngBounds._southWest.lat,
-            swX: latlngBounds._southWest.lng,
-            neY: latlngBounds._northEast.lat,
-            neX: latlngBounds._northEast.lng
-        };
-    }
-}
-
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
     var progressBar, progress, markerList, lenFeatures, marker, i;
@@ -113,7 +96,27 @@ function ajouterWaypointsBounds(latlngBounds) {
             "name": data.name,
             "type": data.type
         };
-        mettreAJoursBoundsCache(latlngBounds);
+
+        ajouterWaypointALaMap(geoJsonToShow);
+    });
+}
+
+function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
+    "use strict";
+    var geojsonFeature, geoJsonToShow, url, pointCentral;
+
+    pointCentral = trouverCenterFromBounds(latlngLocs._southWest.lat, latlngLocs._northEast.lat, latlngLocs._southWest.lng, latlngLocs._northEast.lng);
+    console.log('lat :' + pointCentral.lat + ' lng: ' + pointCentral.lng);
+    geojsonFeature = new L.GeoJSON();
+    geoJsonToShow = {};
+    url = "http://vps84512.ovh.net:4711/api/parking/" + radiusTarget + "/" + pointCentral.lat + "/" + pointCentral.lng;
+    //  console.log(url);
+    $.getJSON(url, function (data) {
+        geoJsonToShow = {
+            "features": data.features,
+            "name": data.name,
+            "type": data.type
+        };
         ajouterWaypointALaMap(geoJsonToShow);
     });
 }
