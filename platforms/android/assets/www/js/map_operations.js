@@ -1,9 +1,31 @@
+/*jslint nomen: true*/
 /*global L,$,console*/
-var map, markers;
+var map, markers, locsLoadedInMemory;
+
+function evaluateIfIShouldLoadWaypointsFromApi(vs, swY, swX, neY, neX) {
+    "use strict";
+    var len, i, j, xj, yj, xi, yi;
+    if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
+        len = vs.length;
+        for (i = 0, j = len - 1; i < len; j = i + 1) {
+            xi = locsLoadedInMemory.neX;
+            yi = locsLoadedInMemory.swX;
+            xj = locsLoadedInMemory.neY;
+            yj = locsLoadedInMemory.swY;
+            if ((neY > yi || swY > yj) &&
+                    (neX < xj || swX < xi)) {
+                return true;
+            }
+        }
+        return false;
+    } else {
+        return false;
+    }
+}
 
 function clearWaypoints() {
     "use strict";
-    if (markers != undefined && markers !== null) {
+    if (markers !== undefined && markers !== null) {
         map.removeLayer(markers);
     }
 }
@@ -28,7 +50,7 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, progress, markerList, lenFeatures, marker;
+    var progressBar, progress, markerList, lenFeatures, marker, i;
     clearWaypoints();
     progress = document.getElementById('progress');
     progressBar = document.getElementById('progress-bar');
@@ -45,11 +67,14 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             progress.style.display = 'none';
         }
     }
-    markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+    markers = L.markerClusterGroup({
+        chunkedLoading: true,
+        chunkProgress: updateProgressBar
+    });
     markerList = [];
     lenFeatures = geojsonMarkers.features.length;
-    for (var i = 0; i < lenFeatures; i++) {
-        var marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
+    for (i = 0; i < lenFeatures; i + 1) {
+        marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
         markerList.push(marker);
     }
     console.log('adding to layer : ' + markerList.length);
@@ -58,6 +83,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
 }
 
 function ajouterWaypointsBounds(latlngBounds) {
+    "use strict";
     var url, geojsonFeature, geoJsonToShow;
 
     geojsonFeature = new L.GeoJSON();
@@ -73,7 +99,7 @@ function ajouterWaypointsBounds(latlngBounds) {
 
         ajouterWaypointALaMap(geoJsonToShow);
     });
-};
+}
 
 function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
     "use strict";
@@ -131,8 +157,8 @@ function initMap() {
     // Methodes lorsque le user deplace la map...
     map.on("dragstart", clearWaypoints);
     map.on("dragend", refreshMap);
-   // map.on("zoomstart", clearWaypoints);
-//    map.on("zoomend", refreshMap);
+    map.on("zoomstart", clearWaypoints);
+    map.on("zoomend", refreshMap);
 
     // Trouve moi donc où je suis !
     map.locate({
