@@ -86,7 +86,6 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
         markerList.push(marker);
     }
-    console.log('adding to layer : ' + markerList.length);
     markers.addLayers(markerList);
     map.addLayer(markers);
 }
