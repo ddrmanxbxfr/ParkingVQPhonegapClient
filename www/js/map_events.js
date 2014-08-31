@@ -81,9 +81,9 @@ function initMap() {
     // Bind la methode après locate...
     map.on('locationfound', onLocationFound);
     // Methodes lorsque le user deplace la map...
-    map.on("dragstart", clearWaypoints);
+    map.on("dragstart", clearWaypointsOnEvent);
     map.on("dragend", refreshMapOnEvent);
-    map.on("zoomstart", clearWaypoints);
+    map.on("zoomstart", clearWaypointsOnEvent);
     map.on("zoomend", refreshMapOnEvent);
 
     // Trouve moi donc où je suis !
