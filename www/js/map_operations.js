@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, markers, map, ajouterWaypointALaMap*/
+/*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlay*/
 var locsLoadedInMemory;
 
 function isLocsLoadedInMemory() {

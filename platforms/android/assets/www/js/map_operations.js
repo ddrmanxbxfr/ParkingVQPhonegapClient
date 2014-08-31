@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
-/*global L,$,console, markers, map, ajouterWaypointALaMap*/
-var locsLoadedInMemory, overlayShown;
+/*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlay*/
+var locsLoadedInMemory;
 
 function isLocsLoadedInMemory() {
     "use strict";
@@ -71,30 +71,6 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
         lng: centreB
     };
     return point;
-}
-
-function showOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    if (overlayShown !== undefined && overlayToShow === false) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        if (cl.contains('off')) {
-            cl.remove('off');
-        }
-        overlayShown = true;
-    }
-}
-
-function hideOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    if (overlayShown) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        cl.add('off');
-        overlayShown = false;
-    }
 }
 
 function ajouterWaypointsBounds(latlngBounds) {
