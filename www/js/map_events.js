@@ -18,6 +18,24 @@ function configurerCssMap() {
     $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
 }
 
+function showOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    overlayToShow = document.getElementById('overlay');
+    cl = overlayToShow.classList;
+    if (cl.contains('off')) {
+        cl.remove('off');
+    }
+}
+
+function hideOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    overlayToShow = document.getElementById('overlay');
+    cl = overlayToShow.classList;
+    cl.add('off');
+}
+
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
     var progressBar, progress, markerList, lenFeatures, marker, i, maxZoom;
