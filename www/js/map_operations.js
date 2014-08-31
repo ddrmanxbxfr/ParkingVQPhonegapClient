@@ -33,7 +33,6 @@ function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
     if (isLocsLoadedInMemory()) {
         if ((mapBounds._northEast.lat > locsLoadedInMemory.swX || mapBounds._southWest.lat > locsLoadedInMemory.swY) && (mapBounds._northEast.lng < locsLoadedInMemory.neY || mapBounds._southWest.lng < locsLoadedInMemory.neX)) {
-            console.log('Indeed the new bounds is in the area');
             return false;
         } else {
             return true;
