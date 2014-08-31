@@ -110,26 +110,6 @@ function ajouterWaypointsBounds(latlngBounds) {
     });
 }
 
-function ajouterWaypointsRadius(radiusTarget, latlngLocs) {
-    "use strict";
-    var geojsonFeature, geoJsonToShow, url, pointCentral;
-
-    pointCentral = trouverCenterFromBounds(latlngLocs._southWest.lat, latlngLocs._northEast.lat, latlngLocs._southWest.lng, latlngLocs._northEast.lng);
-    console.log('lat :' + pointCentral.lat + ' lng: ' + pointCentral.lng);
-    geojsonFeature = new L.GeoJSON();
-    geoJsonToShow = {};
-    url = "http://vps84512.ovh.net:4711/api/parking/" + radiusTarget + "/" + pointCentral.lat + "/" + pointCentral.lng;
-    //  console.log(url);
-    $.getJSON(url, function (data) {
-        geoJsonToShow = {
-            "features": data.features,
-            "name": data.name,
-            "type": data.type
-        };
-        ajouterWaypointALaMap(geoJsonToShow);
-    });
-}
-
 function onLocationFound(e) {
     "use strict";
     var radius = e.accuracy / 2;
