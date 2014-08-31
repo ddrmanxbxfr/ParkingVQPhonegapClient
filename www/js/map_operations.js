@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, markers, map, ajouterWaypointALaMap*/
-var locsLoadedInMemory;
+var locsLoadedInMemory, overlayShown;
 
 function isLocsLoadedInMemory() {
     "use strict";
@@ -34,7 +34,7 @@ function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     if (isLocsLoadedInMemory()) {
         if (
             (mapBounds._southWest.lng > locsLoadedInMemory.swX ||
-             mapBounds._southWest.lat > locsLoadedInMemory.swY) && (
+                mapBounds._southWest.lat > locsLoadedInMemory.swY) && (
                 mapBounds._northEast.lat < locsLoadedInMemory.neY ||
                 mapBounds._northEast.lng < locsLoadedInMemory.neX
             )
@@ -73,6 +73,30 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     return point;
 }
 
+function showOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown !== undefined && overlayToShow === false) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        if (cl.contains('off')) {
+            cl.remove('off');
+        }
+        overlayShown = true;
+    }
+}
+
+function hideOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        cl.add('off');
+        overlayShown = false;
+    }
+}
+
 function ajouterWaypointsBounds(latlngBounds) {
     "use strict";
     var url, geojsonFeature, geoJsonToShow;
@@ -81,6 +105,7 @@ function ajouterWaypointsBounds(latlngBounds) {
     geoJsonToShow = {};
     url = "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
     // console.log(url);
+    showOverlay();
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,

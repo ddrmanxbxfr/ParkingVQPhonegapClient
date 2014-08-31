@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi, showOverlay, hideOverlay*/
 var map, markers;
 
 function onLocationFound(e) {
@@ -16,24 +16,6 @@ function onLocationFound(e) {
 function configurerCssMap() {
     "use strict";
     $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
-}
-
-function showOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    overlayToShow = document.getElementById('overlay');
-    cl = overlayToShow.classList;
-    if (cl.contains('off')) {
-        cl.remove('off');
-    }
-}
-
-function hideOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    overlayToShow = document.getElementById('overlay');
-    cl = overlayToShow.classList;
-    cl.add('off');
 }
 
 function ajouterWaypointALaMap(geojsonMarkers) {
