@@ -20,7 +20,7 @@ function configurerCssMap() {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, progress, markerList, lenFeatures, marker, i;
+    var progressBar, progress, markerList, lenFeatures, marker, i, maxZoom;
     clearWaypoints();
     progress = document.getElementById('progress');
     progressBar = document.getElementById('progress-bar');
@@ -37,10 +37,12 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             progress.style.display = 'none';
         }
     }
-
+    maxZoom = map.getMaxZoom();
     markers = L.markerClusterGroup({
         chunkedLoading: true,
-        chunkProgress: updateProgressBar
+        chunkProgress: updateProgressBar,
+        removeOutsideVisibleBounds: true,
+        disableClusteringAtZoom: maxZoom
     });
     markerList = [];
     lenFeatures = geojsonMarkers.features.length;
