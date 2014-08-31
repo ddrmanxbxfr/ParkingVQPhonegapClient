@@ -31,14 +31,8 @@ function updateLocsInMemory(latlngbounds) {
 
 function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
-    var i, j, xj, yj, xi, yi;
-
     if (isLocsLoadedInMemory()) {
-        xi = locsLoadedInMemory.neX;
-        yi = locsLoadedInMemory.swX;
-        xj = locsLoadedInMemory.neY;
-        yj = locsLoadedInMemory.swY;
-        if ((mapBounds._northEast.lat > yi || mapBounds._southWest.lat > yj) && (mapBounds._northEast.lng < xj || mapBounds._southWest.lng < xi)) {
+        if ((mapBounds._northEast.lat > locsLoadedInMemory.swX || mapBounds._southWest.lat > locsLoadedInMemory.swY) && (mapBounds._northEast.lng < locsLoadedInMemory.neY || mapBounds._southWest.lng < locsLoadedInMemory.neX)) {
             console.log('Indeed the new bounds is in the area');
             return false;
         } else {
@@ -147,31 +141,31 @@ function refreshMap() {
     "use strict";
     var mapBounds = map.getBounds();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-            ajouterWaypointsBounds(mapBounds);
+        ajouterWaypointsBounds(mapBounds);
     }
 }
 
-        function initMap() {
-            "use strict";
-            configurerCssMap();
-            map = L.map('map').setView([46.80, -71.23], 11);
+function initMap() {
+    "use strict";
+    configurerCssMap();
+    map = L.map('map').setView([46.80, -71.23], 11);
 
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
-            }).addTo(map);
+    }).addTo(map);
 
-            // Bind la methode après locate...
-            map.on('locationfound', onLocationFound);
-            // Methodes lorsque le user deplace la map...
-            map.on("dragstart", clearWaypoints);
-            map.on("dragend", refreshMap);
-            //map.on("zoomstart", clearWaypoints);
-            //map.on("zoomend", refreshMap);
+    // Bind la methode après locate...
+    map.on('locationfound', onLocationFound);
+    // Methodes lorsque le user deplace la map...
+    map.on("dragstart", clearWaypoints);
+    map.on("dragend", refreshMap);
+    //map.on("zoomstart", clearWaypoints);
+    //map.on("zoomend", refreshMap);
 
-            // Trouve moi donc où je suis !
-            map.locate({
-                setView: true,
-                maxZoom: 16,
-                enableHighAccuracy: true
-            });
-        }
+    // Trouve moi donc où je suis !
+    map.locate({
+        setView: true,
+        maxZoom: 16,
+        enableHighAccuracy: true
+    });
+}
