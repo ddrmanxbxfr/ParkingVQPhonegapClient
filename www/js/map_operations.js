@@ -31,10 +31,9 @@ function updateLocsInMemory(latlngbounds) {
 
 function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
-    var len, i, j, xj, yj, xi, yi;
+    var i, j, xj, yj, xi, yi;
 
     if (isLocsLoadedInMemory()) {
-        len = vs.length;
         xi = locsLoadedInMemory.neX;
         yi = locsLoadedInMemory.swX;
         xj = locsLoadedInMemory.neY;
