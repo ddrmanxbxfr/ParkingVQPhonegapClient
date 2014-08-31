@@ -2,10 +2,19 @@
 /*global L,$,console*/
 var map, markers, locsLoadedInMemory;
 
+function isLocsLoadedInMemory() {
+    "use strict";
+    if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function evaluateIfIShouldLoadWaypointsFromApi(vs, swY, swX, neY, neX) {
     "use strict";
     var len, i, j, xj, yj, xi, yi;
-    if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
+    if (isLocsLoadedInMemory()) {
         len = vs.length;
         for (i = 0, j = len - 1; i < len; j = i + 1) {
             xi = locsLoadedInMemory.neX;
