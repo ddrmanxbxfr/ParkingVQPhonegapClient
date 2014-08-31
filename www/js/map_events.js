@@ -38,9 +38,8 @@ function hideOverlay() {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, progress, markerList, lenFeatures, marker, i, maxZoom;
-    progress = document.getElementById('progress');
-    progressBar = document.getElementById('progress-bar');
+    var progressBar, markerList, lenFeatures, marker, i, maxZoom;
+    progressBar = document.getElementById('progress_bar');
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
         if (elapsed > 1000) {
