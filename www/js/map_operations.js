@@ -86,11 +86,3 @@ function ajouterWaypointsBounds(latlngBounds) {
         ajouterWaypointALaMap(geoJsonToShow);
     });
 }
-
-function refreshMap() {
-    "use strict";
-    var mapBounds = map.getBounds();
-    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-        ajouterWaypointsBounds(mapBounds);
-    }
-}

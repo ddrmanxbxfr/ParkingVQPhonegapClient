@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
 var map, markers;
 
 function onLocationFound(e) {
@@ -53,6 +53,22 @@ function ajouterWaypointALaMap(geojsonMarkers) {
 }
 
 
+function clearWaypointsOnEvent() {
+    "use strict";
+    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds())) {
+        clearWaypoints();
+    }
+}
+
+function refreshMapOnEvent() {
+    "use strict";
+    var mapBounds = map.getBounds();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
+        ajouterWaypointsBounds(mapBounds);
+    }
+}
+
+
 function initMap() {
     "use strict";
     configurerCssMap();
@@ -66,9 +82,9 @@ function initMap() {
     map.on('locationfound', onLocationFound);
     // Methodes lorsque le user deplace la map...
     map.on("dragstart", clearWaypoints);
-    map.on("dragend", refreshMap);
-    //map.on("zoomstart", clearWaypoints);
-    //map.on("zoomend", refreshMap);
+    map.on("dragend", refreshMapOnEvent);
+    map.on("zoomstart", clearWaypoints);
+    map.on("zoomend", refreshMapOnEvent);
 
     // Trouve moi donc où je suis !
     map.locate({
