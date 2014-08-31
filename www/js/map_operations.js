@@ -11,24 +11,42 @@ function isLocsLoadedInMemory() {
     }
 }
 
-function evaluateIfIShouldLoadWaypointsFromApi(vs, swY, swX, neY, neX) {
+
+function updateLocsInMemory(latlngbounds) {
+    "use strict";
+    if (locsLoadedInMemory !== undefined) {
+        locsLoadedInMemory.swY = latlngbounds._southWest.lat;
+        locsLoadedInMemory.swX = latlngbounds._southWest.lng;
+        locsLoadedInMemory.neY = latlngbounds._northEast.lat;
+        locsLoadedInMemory.neX = latlngbounds._northEast.lng;
+    } else {
+        locsLoadedInMemory = {
+            swY: latlngbounds._southWest.lat,
+            swX: latlngbounds._southWest.lng,
+            neY: latlngbounds._northEast.lat,
+            neX: latlngbounds._northEast.lng
+        };
+    }
+}
+
+function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
     var len, i, j, xj, yj, xi, yi;
+
     if (isLocsLoadedInMemory()) {
         len = vs.length;
-        for (i = 0, j = len - 1; i < len; j = i + 1) {
-            xi = locsLoadedInMemory.neX;
-            yi = locsLoadedInMemory.swX;
-            xj = locsLoadedInMemory.neY;
-            yj = locsLoadedInMemory.swY;
-            if ((neY > yi || swY > yj) &&
-                    (neX < xj || swX < xi)) {
-                return true;
-            }
+        xi = locsLoadedInMemory.neX;
+        yi = locsLoadedInMemory.swX;
+        xj = locsLoadedInMemory.neY;
+        yj = locsLoadedInMemory.swY;
+        if ((mapBounds._northEast.lat > yi || mapBounds._southWest.lat > yj) && (mapBounds._northEast.lng < xj || mapBounds._southWest.lng < xi)) {
+            console.log('Indeed the new bounds is in the area');
+            return false;
+        } else {
+            return true;
         }
-        return false;
     } else {
-        return false;
+        return true;
     }
 }
 
@@ -82,7 +100,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     });
     markerList = [];
     lenFeatures = geojsonMarkers.features.length;
-    for (i = 0; i < lenFeatures; i + 1) {
+    for (i = 0; i < lenFeatures; i = i + 1) {
         marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
         markerList.push(marker);
     }
@@ -104,7 +122,7 @@ function ajouterWaypointsBounds(latlngBounds) {
             "name": data.name,
             "type": data.type
         };
-
+        updateLocsInMemory(latlngBounds);
         ajouterWaypointALaMap(geoJsonToShow);
     });
 }
@@ -128,30 +146,33 @@ function configurerCssMap() {
 
 function refreshMap() {
     "use strict";
-    ajouterWaypointsBounds(map.getBounds());
+    var mapBounds = map.getBounds();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
+            ajouterWaypointsBounds(mapBounds);
+    }
 }
 
-function initMap() {
-    "use strict";
-    configurerCssMap();
-    map = L.map('map').setView([46.80, -71.23], 11);
+        function initMap() {
+            "use strict";
+            configurerCssMap();
+            map = L.map('map').setView([46.80, -71.23], 11);
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
-    }).addTo(map);
+            }).addTo(map);
 
-    // Bind la methode après locate...
-    map.on('locationfound', onLocationFound);
-    // Methodes lorsque le user deplace la map...
-    map.on("dragstart", clearWaypoints);
-    map.on("dragend", refreshMap);
-    map.on("zoomstart", clearWaypoints);
-    map.on("zoomend", refreshMap);
+            // Bind la methode après locate...
+            map.on('locationfound', onLocationFound);
+            // Methodes lorsque le user deplace la map...
+            map.on("dragstart", clearWaypoints);
+            map.on("dragend", refreshMap);
+            //map.on("zoomstart", clearWaypoints);
+            //map.on("zoomend", refreshMap);
 
-    // Trouve moi donc où je suis !
-    map.locate({
-        setView: true,
-        maxZoom: 16,
-        enableHighAccuracy: true
-    });
-}
+            // Trouve moi donc où je suis !
+            map.locate({
+                setView: true,
+                maxZoom: 16,
+                enableHighAccuracy: true
+            });
+        }
