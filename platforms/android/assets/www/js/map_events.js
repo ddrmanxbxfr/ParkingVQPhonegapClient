@@ -13,12 +13,23 @@ function onLocationFound(e) {
     ajouterWaypointsBounds(map.getBounds());
 }
 
+function setProgressBar(percentProgress) {
+    "use strict";
+    document.getElementById('progress_bar').style.width = percentProgress + '%';
+}
+
+function setProgressBar(percentProgress, element) {
+    "use strict";
+    element.style.width = percentProgress + '%';
+}
+
 function showOverlay() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown === undefined || overlayShown === false) {
         overlayToShow = document.getElementById('overlay');
         cl = overlayToShow.classList;
+        setProgressBar(0);
         if (cl.contains('off')) {
             cl.remove('off');
         }
@@ -51,7 +62,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         if (elapsed > 1000) {
             // if it takes more than a second to load, display the progress bar:
             showOverlay();
-            progressBar.style.width = Math.round(processed / total * 100) + '%';
+            setProgressBar(Math.round(processed / total * 100), progressBar);
         }
 
         if (processed === total) {
@@ -94,9 +105,6 @@ function refreshMapOnEvent() {
         ajouterWaypointsBounds(mapBounds);
     }
 }
-
-
-
 
 function initMap() {
     "use strict";

@@ -18,11 +18,6 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
-function setProgressBar(percentProgress, element) {
-    "use strict";
-    element.style.width = percentProgress + '%';
-}
-
 function showOverlay() {
     "use strict";
     var overlayToShow, cl;
@@ -62,7 +57,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         if (elapsed > 1000) {
             // if it takes more than a second to load, display the progress bar:
             showOverlay();
-            setProgressBar(Math.round(processed / total * 100), progressBar);
+            progressBar.style.width = Math.round(processed / total * 100) + "%";
         }
 
         if (processed === total) {
