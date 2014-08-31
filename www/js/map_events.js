@@ -95,9 +95,6 @@ function refreshMapOnEvent() {
     }
 }
 
-
-
-
 function initMap() {
     "use strict";
     configurerCssMap();
