@@ -50,6 +50,7 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/css/pacifico_font.css \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/css/topcoat-mobile-dark.css \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/css/topcoat-mobile-dark.min.css \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/css/topcoat-overlay.css \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/font/pacifico-webfont.eot \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/font/pacifico-webfont.svg \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/font/pacifico-webfont.ttf \

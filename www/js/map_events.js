@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi, showOverlay, hideOverlay*/
-var map, markers;
+var map, markers, overlayShown;
 
 function onLocationFound(e) {
     "use strict";
@@ -68,6 +68,30 @@ function refreshMapOnEvent() {
     var mapBounds = map.getBounds();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
         ajouterWaypointsBounds(mapBounds);
+    }
+}
+
+function showOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown !== undefined && overlayToShow === false) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        if (cl.contains('off')) {
+            cl.remove('off');
+        }
+        overlayShown = true;
+    }
+}
+
+function hideOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        cl.add('off');
+        overlayShown = false;
     }
 }
 
