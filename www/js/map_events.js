@@ -16,7 +16,7 @@ function onLocationFound(e) {
 function showOverlay() {
     "use strict";
     var overlayToShow, cl;
-    if (overlayShown === undefined || overlayToShow === false) {
+    if (overlayShown === undefined || overlayShown === false) {
         overlayToShow = document.getElementById('overlay');
         cl = overlayToShow.classList;
         if (cl.contains('off')) {

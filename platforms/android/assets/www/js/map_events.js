@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi, showOverlay, hideOverlay*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -11,6 +11,30 @@ function onLocationFound(e) {
 
     L.circle(e.latlng, radius).addTo(map);
     ajouterWaypointsBounds(map.getBounds());
+}
+
+function showOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown === undefined || overlayShown === false) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        if (cl.contains('off')) {
+            cl.remove('off');
+        }
+        overlayShown = true;
+    }
+}
+
+function hideOverlay() {
+    "use strict";
+    var overlayToShow, cl;
+    if (overlayShown) {
+        overlayToShow = document.getElementById('overlay');
+        cl = overlayToShow.classList;
+        cl.add('off');
+        overlayShown = false;
+    }
 }
 
 function configurerCssMap() {
@@ -71,29 +95,7 @@ function refreshMapOnEvent() {
     }
 }
 
-function showOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    if (overlayShown !== undefined && overlayToShow === false) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        if (cl.contains('off')) {
-            cl.remove('off');
-        }
-        overlayShown = true;
-    }
-}
 
-function hideOverlay() {
-    "use strict";
-    var overlayToShow, cl;
-    if (overlayShown) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        cl.add('off');
-        overlayShown = false;
-    }
-}
 
 
 function initMap() {
