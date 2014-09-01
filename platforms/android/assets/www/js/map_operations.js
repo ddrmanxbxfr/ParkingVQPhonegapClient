@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
-/*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlay*/
-var locsLoadedInMemory;
+/*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlayMap*/
+var locsLoadedInMemory, reducedDataset;
 
 function isLocsLoadedInMemory() {
     "use strict";
@@ -29,22 +29,48 @@ function updateLocsInMemory(latlngbounds) {
     }
 }
 
-function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
+function isPointInPoly(ptLat, ptLng) {
+    // Algo trouvé sur...
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
     "use strict";
-    if (isLocsLoadedInMemory()) {
-        if (
-            (mapBounds._southWest.lng > locsLoadedInMemory.swX ||
-                mapBounds._southWest.lat > locsLoadedInMemory.swY) && (
-                mapBounds._northEast.lat < locsLoadedInMemory.neY ||
-                mapBounds._northEast.lng < locsLoadedInMemory.neX
-            )
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+    var x, y, xi, yi, xj, yj, intersect, inside;
+    x = ptLng;
+    y = ptLat;
+    inside = false;
+    xi = locsLoadedInMemory.neY;
+    yi = locsLoadedInMemory.swY;
+    xj = locsLoadedInMemory.neX;
+    yj = locsLoadedInMemory.neY;
+    intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) {
+        inside = !inside;
+    }
+
+    return inside;
+}
+
+function evaluateIfIShouldLoadWaypointsFromApi(mapBounds, zoomLevel) {
+    "use strict";
+    if (zoomLevel >= 14 && reducedDataset === true) {
+        return true; // We zoomed in
     } else {
-        return true;
+        if (zoomLevel < 14 && reducedDataset === false) {
+            return true;
+        } else {
+            if (isLocsLoadedInMemory()) {
+                if (
+                    isPointInPoly(mapBounds._southWest.lat,
+                        mapBounds._southWest.lng) && isPointInPoly(mapBounds._northEast.lat,
+                        mapBounds._northEast.lng)
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
     }
 }
 
@@ -73,15 +99,28 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     return point;
 }
 
-function ajouterWaypointsBounds(latlngBounds) {
+function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     "use strict";
-    var url, geojsonFeature, geoJsonToShow;
 
+    function getUrlForZoomLevel(latlngBounds, zoomLevel) {
+        if (zoomLevel >= 14) {
+            if (reducedDataset) {
+                reducedDataset = false;
+            }
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+        } else {
+            if (!reducedDataset) {
+                reducedDataset = true;
+            }
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
+        }
+    }
+    var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+    url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
-    showOverlay();
+    showOverlayMap();
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,

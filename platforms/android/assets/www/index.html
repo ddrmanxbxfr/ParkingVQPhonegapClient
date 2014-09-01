@@ -25,21 +25,38 @@
         </div>
     </div>
 
-<div id="overlay" class="off">
+    <div id="overlay" class="off">
         <div class="topcoat-overlay-bg"></div>
         <aside class="topcoat-overlay">
             <h3 class="topcoat-overlay__title">Chargement des zones de stationnements...</h3>
             <p>
-            <div id='spinner' class='topcoat-spinner'></div>
-            <div class='topcoat-progress-bar centerize'>
-                <span id="progress_bar" class='progress' style='width:10%'></span>
-            </div>
-            <div class="topcoat-overlay-buttons">
-                <button role="button" class="topcoat-button--cta">Annuler</button>
-            </div>
+                <div id='spinner' class='topcoat-spinner'></div>
+                <div class='topcoat-progress-bar centerize'>
+                    <span id="progress_bar" class='progress' style='width:10%'></span>
+                </div>
+                <div class="topcoat-overlay-buttons">
+                    <button role="button" class="topcoat-button--cta">Annuler</button>
+                </div>
             </p>
         </aside>
-        </div>
+    </div>
+
+    <div id="overlay_legend" class="off">
+        <div class="topcoat-overlay-bg"></div>
+        <aside class="topcoat-overlay">
+            <h3 class="topcoat-overlay__title">Légende</h3>
+            <p>
+                <ul>
+                    <li><img src="img/parcometre.png" /> Ce marqueur représente un parcomètre.</li>
+                    <li><img src="img/parkingicon.png" /> Ce marqueur représente un espace de stationnement limité</li>
+                    <li><img src="img/bornefontaine.png" /> Ce marquer represente une borne fontaine.</li>
+                </ul>
+                <div class="topcoat-overlay-buttons">
+                    <button role="button" class="topcoat-button--cta" id="btnLegendClose">Fermer</button>
+                </div>
+            </p>
+        </aside>
+    </div>
 
     <div id="main-content">
 
@@ -48,7 +65,7 @@
     <div class="topcoat-tab-bar full" style="position: fixed; bottom: 0px;">
         <label class="topcoat-tab-bar__item">
             <input type="radio" name="topcoat">
-            <button class="topcoat-tab-bar__button full" id="btnAskParking">Légende</button>
+            <button class="topcoat-tab-bar__button full" id="btnLegend">Légende</button>
         </label>
         <label class="topcoat-tab-bar__item">
             <input type="radio" name="topcoat">
@@ -60,6 +77,7 @@
     <script type="text/javascript" src="js/zepto.min.js"></script>
     <script type="text/javascript" src="js/leaflet.js"></script>
     <script type="text/javascript" src="js/leaflet.markercluster-src.js"></script>
+    <script type="text/javascript" src="js/ui_operations.js"></script>
     <script type="text/javascript" src="js/map_operations.js"></script>
     <script type="text/javascript" src="js/map_events.js"></script>
     <script type="text/javascript" src="js/setEvents.js"></script>

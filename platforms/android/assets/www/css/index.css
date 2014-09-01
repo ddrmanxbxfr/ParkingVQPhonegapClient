@@ -7,3 +7,7 @@
 body, .topcoat-navigation-bar, .topcoat-tab-bar__button{
  background-color: #FFB900;
 }
+
+ul {
+    list-style: none;
+}

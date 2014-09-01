@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -18,27 +18,20 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
-function showOverlay() {
+function showOverlayMap() {
     "use strict";
-    var overlayToShow, cl;
     if (overlayShown === undefined || overlayShown === false) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
         setProgressBar(0);
-        if (cl.contains('off')) {
-            cl.remove('off');
-        }
+        showOverlay("overlay");
         overlayShown = true;
     }
 }
 
-function hideOverlay() {
+function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        cl.add('off');
+        hideOverlay("overlay");
         overlayShown = false;
     }
 }
@@ -63,12 +56,12 @@ function ajouterWaypointALaMap(geojsonMarkers) {
                 });
             case "PARCOMETRE":
                 return L.icon({
-                    iconUrl: 'img/parkingicon.png',
+                    iconUrl: 'img/parcometre.png',
                     iconSize: [38, 38] // size of the icon
                 });
             case "BORNES_FONTAINES":
                 return L.icon({
-                    iconUrl: 'img/parkingicon.png',
+                    iconUrl: 'img/bornefontaine.png',
                     iconSize: [38, 38] // size of the icon
                 });
             }
@@ -88,13 +81,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     function updateProgressBar(processed, total, elapsed, layersArray) {
         if (elapsed > 1000) {
             // if it takes more than a second to load, display the progress bar:
-            showOverlay();
+            showOverlayMap();
             progressBar.style.width = Math.round(processed / total * 100) + "%";
         }
 
         if (processed === total) {
             // all markers processed - hide the progress bar:
-            hideOverlay();
+            hideOverlayMap();
         }
     }
 
@@ -112,19 +105,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     map.addLayer(markers);
 }
 
-
-function clearWaypointsOnEvent() {
-    "use strict";
-    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds())) {
-        clearWaypoints();
-    }
-}
-
 function refreshMapOnEvent() {
     "use strict";
-    var mapBounds = map.getBounds();
-    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-        ajouterWaypointsBounds(mapBounds);
+    var mapBounds, mapZoom;
+    mapBounds = map.getBounds();
+    mapZoom = map.getZoom();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        ajouterWaypointsBounds(mapBounds, mapZoom);
     }
 }
 

@@ -79,7 +79,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     }
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
-        if (elapsed > 1000) {
+        if (elapsed > 2000) {
             // if it takes more than a second to load, display the progress bar:
             showOverlayMap();
             progressBar.style.width = Math.round(processed / total * 100) + "%";
