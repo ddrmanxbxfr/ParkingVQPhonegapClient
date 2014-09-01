@@ -29,16 +29,27 @@ function updateLocsInMemory(latlngbounds) {
     }
 }
 
+function isPointInPoly(ptLat, ptLng) {
+      // Algo trouvé sur...
+      // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    var x = ptLng, y = ptLat;
+    var inside = false;
+        var xi = locsLoadedInMemory.neY, yi = locsLoadedInMemory.swY;
+        var xj = locsLoadedInMemory.neX, yj = locsLoadedInMemory.neY;
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+
+    return inside;
+}
+
 function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
     "use strict";
     if (isLocsLoadedInMemory()) {
         if (
-            (mapBounds._southWest.lng > locsLoadedInMemory.swX ||
-                mapBounds._southWest.lat > locsLoadedInMemory.swY) && (
-                mapBounds._northEast.lat < locsLoadedInMemory.neY ||
-                mapBounds._northEast.lng < locsLoadedInMemory.neX
-            )
-        ) {
+            isPointInPoly(mapBounds._southWest.lat, mapBounds._southWest.lng) &&
+             isPointInPoly(mapBounds._northEast.lat, mapBounds._northEast.lng))
+         {
             return false;
         } else {
             return true;
