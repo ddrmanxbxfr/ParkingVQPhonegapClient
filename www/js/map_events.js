@@ -74,14 +74,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             }
         }
 
-        var markerList, lenFeatures, i, marker;
+        var markerList, lenFeatures, i;
         markerList = [];
         lenFeatures = geojsonMarkers.features.length;
         for (i = 0; i < lenFeatures; i = i + 1) {
-            marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]), {
+            markerList.push(L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]), {
                 icon: getMapIcon(geojsonMarkers.features[i].properties.TYPE_SRC)
-            });
-            markerList.push(marker);
+            }));
         }
         return markerList;
     }
