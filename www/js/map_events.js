@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
-var map, markers, overlayShown, reducedDataset;
+var map, markers, overlayShown;
 
 function onLocationFound(e) {
     "use strict";
@@ -115,7 +115,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
 
 function clearWaypointsOnEvent() {
     "use strict";
-    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds())) {
+    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds(), map.getZoom())) {
         clearWaypoints();
     }
 }

@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlay*/
-var locsLoadedInMemory;
+var locsLoadedInMemory, reducedDataset;
 
 function isLocsLoadedInMemory() {
     "use strict";
@@ -49,19 +49,28 @@ function isPointInPoly(ptLat, ptLng) {
     return inside;
 }
 
-function evaluateIfIShouldLoadWaypointsFromApi(mapBounds) {
+function evaluateIfIShouldLoadWaypointsFromApi(mapBounds, zoomLevel) {
     "use strict";
-    if (isLocsLoadedInMemory()) {
-        if (
-            isPointInPoly(mapBounds._southWest.lat, mapBounds._southWest.lng) &&
-                isPointInPoly(mapBounds._northEast.lat, mapBounds._northEast.lng)
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+    if (zoomLevel >= 14 && reducedDataset === true) {
+        return true; // We zoomed in
     } else {
-        return true;
+        if (zoomLevel < 14 && reducedDataset === false) {
+            return true;
+        } else {
+            if (isLocsLoadedInMemory()) {
+                if (
+                    isPointInPoly(mapBounds._southWest.lat,
+                        mapBounds._southWest.lng) && isPointInPoly(mapBounds._northEast.lat,
+                        mapBounds._northEast.lng)
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
     }
 }
 
@@ -95,8 +104,14 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
         if (zoomLevel >= 14) {
+            if (reducedDataset) {
+                reducedDataset = false;
+            }
             return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
         } else {
+            if (!reducedDataset) {
+                reducedDataset = true;
+            }
             return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
         }
     }
