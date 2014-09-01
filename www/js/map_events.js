@@ -50,8 +50,19 @@ function configurerCssMap() {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, markerList, lenFeatures, marker, i, maxZoom;
+    var progressBar, lenFeatures, maxZoom;
     progressBar = document.getElementById('progress_bar');
+
+    function generateMarkerList(geojsonMarkers) {
+        var markerList, lenFeatures, i, marker;
+        markerList = [];
+        lenFeatures = geojsonMarkers.features.length;
+        for (i = 0; i < lenFeatures; i = i + 1) {
+            marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
+            markerList.push(marker);
+        }
+        return markerList;
+    }
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
         if (elapsed > 1000) {
@@ -65,6 +76,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             hideOverlay();
         }
     }
+
     maxZoom = map.getMaxZoom();
     markers = L.markerClusterGroup({
         chunkedLoading: true,
@@ -72,16 +84,10 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         removeOutsideVisibleBounds: true,
         disableClusteringAtZoom: maxZoom
     });
-    markerList = [];
-    lenFeatures = geojsonMarkers.features.length;
-    for (i = 0; i < lenFeatures; i = i + 1) {
-        marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
-        markerList.push(marker);
-    }
 
     clearWaypoints();
 
-    markers.addLayers(markerList);
+    markers.addLayers(generateMarkerList(geojsonMarkers));
     map.addLayer(markers);
 }
 
