@@ -124,7 +124,7 @@ function refreshMapOnEvent() {
     "use strict";
     var mapBounds = map.getBounds();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-        ajouterWaypointsBounds(mapBounds);
+        ajouterWaypointsBounds(mapBounds, map.getZoom());
     }
 }
 
