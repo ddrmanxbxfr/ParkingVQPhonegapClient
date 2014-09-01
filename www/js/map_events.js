@@ -50,7 +50,7 @@ function configurerCssMap() {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, lenFeatures, maxZoom;
+    var progressBar, maxZoom;
     progressBar = document.getElementById('progress_bar');
 
     function generateMarkerList(geojsonMarkers) {
