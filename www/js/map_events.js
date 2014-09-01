@@ -18,7 +18,7 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
-function showOverlay() {
+function showOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown === undefined || overlayShown === false) {
@@ -32,7 +32,7 @@ function showOverlay() {
     }
 }
 
-function hideOverlay() {
+function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
@@ -88,13 +88,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     function updateProgressBar(processed, total, elapsed, layersArray) {
         if (elapsed > 1000) {
             // if it takes more than a second to load, display the progress bar:
-            showOverlay();
+            showOverlayMap();
             progressBar.style.width = Math.round(processed / total * 100) + "%";
         }
 
         if (processed === total) {
             // all markers processed - hide the progress bar:
-            hideOverlay();
+            hideOverlayMap();
         }
     }
 

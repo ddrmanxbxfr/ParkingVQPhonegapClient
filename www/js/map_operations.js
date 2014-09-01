@@ -120,7 +120,7 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     geoJsonToShow = {};
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
-    showOverlay();
+    showOverlayMap();
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,
