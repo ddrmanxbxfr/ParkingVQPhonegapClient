@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -20,14 +20,9 @@ function setProgressBar(percentProgress) {
 
 function showOverlayMap() {
     "use strict";
-    var overlayToShow, cl;
     if (overlayShown === undefined || overlayShown === false) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
         setProgressBar(0);
-        if (cl.contains('off')) {
-            cl.remove('off');
-        }
+        showOverlay("overlay");
         overlayShown = true;
     }
 }
@@ -36,9 +31,7 @@ function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        cl.add('off');
+        hideOverlay("overlay");
         overlayShown = false;
     }
 }

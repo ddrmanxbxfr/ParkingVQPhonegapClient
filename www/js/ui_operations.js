@@ -8,7 +8,7 @@ function showOverlay(overlayName) {
     }
 }
 
-function hideOverlayMap(overlayName) {
+function hideOverlay(overlayName) {
     "use strict";
     var overlayToShow, cl;
     overlayToShow = document.getElementById(overlayName);

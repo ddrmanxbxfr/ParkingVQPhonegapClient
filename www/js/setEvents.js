@@ -1,4 +1,4 @@
-/*global $*/
+/*global $,showOverlay,hideOverlay*/
 // Ce script change le contenu disponible !
 
 function templateShowMap() {
@@ -8,7 +8,7 @@ function templateShowMap() {
 
 $('#btnLegend').click(function () {
     "use strict";
-    showOverlay();
+    showOverlay("overlay_legend");
 });
 
 $('#btnShowMap').click(function () {
@@ -16,7 +16,7 @@ $('#btnShowMap').click(function () {
     templateShowMap();
 });
 
-$('#btnLegendClose').click(function() {
+$('#btnLegendClose').click(function () {
     "use strict";
-    alert('closing legend');
+    hideOverlay("overlay_legend");
 });
