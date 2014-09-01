@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -141,7 +141,6 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    reducedDataset = false;
     map = L.map('map').setView([46.80, -71.23], 11);
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
