@@ -112,19 +112,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     map.addLayer(markers);
 }
 
-
-function clearWaypointsOnEvent() {
-    "use strict";
-    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds(), map.getZoom())) {
-        clearWaypoints();
-    }
-}
-
 function refreshMapOnEvent() {
     "use strict";
-    var mapBounds = map.getBounds();
-    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-        ajouterWaypointsBounds(mapBounds, map.getZoom());
+    var mapBounds, mapZoom;
+    mapBounds = map.getBounds();
+    mapZoom = map.getZoom();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        ajouterWaypointsBounds(mapBounds, mapZoom);
     }
 }
 
