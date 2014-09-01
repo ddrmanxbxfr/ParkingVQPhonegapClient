@@ -92,14 +92,13 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     }
 
     maxZoom = map.getMaxZoom();
+    clearWaypoints();
     markers = L.markerClusterGroup({
         chunkedLoading: true,
         chunkProgress: updateProgressBar,
         removeOutsideVisibleBounds: true,
         disableClusteringAtZoom: maxZoom
     });
-
-    clearWaypoints();
 
     markers.addLayers(generateMarkerList(geojsonMarkers));
     map.addLayer(markers);

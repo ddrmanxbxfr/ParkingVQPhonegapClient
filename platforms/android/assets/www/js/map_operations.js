@@ -107,7 +107,7 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             if (reducedDataset) {
                 reducedDataset = false;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
         } else {
             if (!reducedDataset) {
                 reducedDataset = true;
