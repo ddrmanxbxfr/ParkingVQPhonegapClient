@@ -50,8 +50,40 @@ function configurerCssMap() {
 
 function ajouterWaypointALaMap(geojsonMarkers) {
     "use strict";
-    var progressBar, markerList, lenFeatures, marker, i, maxZoom;
+    var progressBar, maxZoom;
     progressBar = document.getElementById('progress_bar');
+
+    function generateMarkerList(geojsonMarkers) {
+        function getMapIcon(nomProp) {
+            switch (nomProp) {
+            case "PANNEAU_S":
+                return L.icon({
+                    iconUrl: 'img/parkingicon.png',
+                    iconSize: [38, 38] // size of the icon
+                });
+            case "PARCOMETRE":
+                return L.icon({
+                    iconUrl: 'img/parkingicon.png',
+                    iconSize: [38, 38] // size of the icon
+                });
+            case "BORNES_FONTAINES":
+                return L.icon({
+                    iconUrl: 'img/parkingicon.png',
+                    iconSize: [38, 38] // size of the icon
+                });
+            }
+        }
+
+        var markerList, lenFeatures, i;
+        markerList = [];
+        lenFeatures = geojsonMarkers.features.length;
+        for (i = 0; i < lenFeatures; i = i + 1) {
+            markerList.push(L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]), {
+                icon: getMapIcon(geojsonMarkers.features[i].properties.TYPE_SRC)
+            }));
+        }
+        return markerList;
+    }
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
         if (elapsed > 1000) {
@@ -65,6 +97,7 @@ function ajouterWaypointALaMap(geojsonMarkers) {
             hideOverlay();
         }
     }
+
     maxZoom = map.getMaxZoom();
     markers = L.markerClusterGroup({
         chunkedLoading: true,
@@ -72,16 +105,10 @@ function ajouterWaypointALaMap(geojsonMarkers) {
         removeOutsideVisibleBounds: true,
         disableClusteringAtZoom: maxZoom
     });
-    markerList = [];
-    lenFeatures = geojsonMarkers.features.length;
-    for (i = 0; i < lenFeatures; i = i + 1) {
-        marker = L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]));
-        markerList.push(marker);
-    }
 
     clearWaypoints();
 
-    markers.addLayers(markerList);
+    markers.addLayers(generateMarkerList(geojsonMarkers));
     map.addLayer(markers);
 }
 
@@ -101,6 +128,16 @@ function refreshMapOnEvent() {
     }
 }
 
+function locateMeOnMap() {
+    "use strict";
+    // Trouve moi donc où je suis !
+    map.locate({
+        setView: true,
+        maxZoom: 16,
+        enableHighAccuracy: true
+    });
+}
+
 function initMap() {
     "use strict";
     configurerCssMap();
@@ -118,10 +155,5 @@ function initMap() {
     map.on("zoomstart", clearWaypointsOnEvent);
     map.on("zoomend", refreshMapOnEvent);
 
-    // Trouve moi donc où je suis !
-    map.locate({
-        setView: true,
-        maxZoom: 16,
-        enableHighAccuracy: true
-    });
+    locateMeOnMap();
 }
