@@ -101,6 +101,16 @@ function refreshMapOnEvent() {
     }
 }
 
+function locateMeOnMap() {
+    "use strict";
+    // Trouve moi donc où je suis !
+    map.locate({
+        setView: true,
+        maxZoom: 16,
+        enableHighAccuracy: true
+    });
+}
+
 function initMap() {
     "use strict";
     configurerCssMap();
@@ -118,10 +128,5 @@ function initMap() {
     map.on("zoomstart", clearWaypointsOnEvent);
     map.on("zoomend", refreshMapOnEvent);
 
-    // Trouve moi donc où je suis !
-    map.locate({
-        setView: true,
-        maxZoom: 16,
-        enableHighAccuracy: true
-    });
+    locateMeOnMap();
 }
