@@ -90,13 +90,22 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     return point;
 }
 
+function getUrlForZoomLevel(zoomLevel) {
+    "use strict";
+    if (zoomLevel >= 14)
+        return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+    else {
+        return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
+    }
+}
+
 function ajouterWaypointsBounds(latlngBounds) {
     "use strict";
     var url, geojsonFeature, geoJsonToShow;
 
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+    url = getUrlForZoomLevel(zoomLevel);
     // console.log(url);
     showOverlay();
     $.getJSON(url, function (data) {
