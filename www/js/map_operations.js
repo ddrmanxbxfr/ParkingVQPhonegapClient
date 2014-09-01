@@ -90,19 +90,17 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     return point;
 }
 
-function getUrlForZoomLevel(zoomLevel) {
+function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     "use strict";
-    if (zoomLevel >= 14)
-        return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
-    else {
-        return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
+
+    function getUrlForZoomLevel(zoomLevel, latlngBounds) {
+        if (zoomLevel >= 14) {
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
+        } else {
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
+        }
     }
-}
-
-function ajouterWaypointsBounds(latlngBounds) {
-    "use strict";
     var url, geojsonFeature, geoJsonToShow;
-
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
     url = getUrlForZoomLevel(zoomLevel);
