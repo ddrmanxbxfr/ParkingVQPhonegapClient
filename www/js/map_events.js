@@ -63,12 +63,12 @@ function ajouterWaypointALaMap(geojsonMarkers) {
                 });
             case "PARCOMETRE":
                 return L.icon({
-                    iconUrl: 'img/parkingicon.png',
+                    iconUrl: 'img/parcometre.png',
                     iconSize: [38, 38] // size of the icon
                 });
             case "BORNES_FONTAINES":
                 return L.icon({
-                    iconUrl: 'img/parkingicon.png',
+                    iconUrl: 'img/bornefontaine.png',
                     iconSize: [38, 38] // size of the icon
                 });
             }
