@@ -93,7 +93,7 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
 function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     "use strict";
 
-    function getUrlForZoomLevel(zoomLevel, latlngBounds) {
+    function getUrlForZoomLevel(latlngBounds, zoomLevel) {
         if (zoomLevel >= 14) {
             return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng;
         } else {
@@ -103,7 +103,7 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = getUrlForZoomLevel(zoomLevel);
+    url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlay();
     $.getJSON(url, function (data) {
