@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
-var map, markers, overlayShown;
+var map, markers, overlayShown, cacheLocAfterMove;
 
 function onLocationFound(e) {
     "use strict";
@@ -9,7 +9,6 @@ function onLocationFound(e) {
     L.marker(e.latlng).addTo(map)
         .bindPopup("Vous êtes ici").openPopup();
 
-    L.circle(e.latlng, radius).addTo(map);
     ajouterWaypointsBounds(map.getBounds());
 }
 
@@ -104,14 +103,37 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     map.addLayer(markers);
 }
 
+function updateCacheLocs(mapBounds, mapZoom) {
+    "use strict";
+    cacheLocAfterMove = {
+        zoom: mapZoom,
+        swLat: mapBounds._southWest.lat,
+        swLng: mapBounds._southWest.lng,
+        neLat: mapBounds._northEast.lat,
+        neLng: mapBounds._northEast.lng
+    };
+}
+
+function verifyIfLocDidntChange(mapBounds, mapZoom) {
+    "use strict";
+    if (cacheLocAfterMove !== undefined && cacheLocAfterMove.zoom === mapZoom && cacheLocAfterMove.swLat === mapBounds._southWest.lat && cacheLocAfterMove.swLng === mapBounds._southWest.lng && cacheLocAfterMove.neLat === mapBounds._northEast.lat && cacheLocAfterMove.neLng === mapBounds._northEast.lng) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function refreshMapOnEvent() {
     "use strict";
-    var mapBounds, mapZoom;
-    mapBounds = map.getBounds();
-    mapZoom = map.getZoom();
-    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
-        ajouterWaypointsBounds(mapBounds, mapZoom);
-    }
+    updateCacheLocs(map.getBounds(), map.getZoom());
+    setTimeout(function () {
+        var mapBounds, mapZoom;
+        mapBounds = map.getBounds();
+        mapZoom = map.getZoom();
+        if (verifyIfLocDidntChange(mapBounds, mapZoom) && evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+            ajouterWaypointsBounds(mapBounds, mapZoom);
+        }
+    }, 1000);
 }
 
 function locateMeOnMap() {

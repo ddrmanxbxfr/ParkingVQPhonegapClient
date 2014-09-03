@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi*/
-var map, markers, overlayShown, cacheLocAfterMove;
+var map, markers, overlayShown;
 
 function onLocationFound(e) {
     "use strict";
@@ -103,37 +103,15 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     map.addLayer(markers);
 }
 
-function updateCacheLocs(mapBounds, mapZoom) {
-    "use strict";
-    cacheLocAfterMove = {
-        zoom: mapZoom,
-        swLat: mapBounds._southWest.lat,
-        swLng: mapBounds._southWest.lng,
-        neLat: mapBounds._northEast.lat,
-        neLng: mapBounds._northEast.lng
-    };
-}
-
-function verifyIfLocDidntChange(mapBounds, mapZoom) {
-    "use strict";
-    if (cacheLocAfterMove !== undefined && cacheLocAfterMove.zoom === mapZoom && cacheLocAfterMove.swLat === mapBounds._southWest.lat && cacheLocAfterMove.swLng === mapBounds._southWest.lng && cacheLocAfterMove.neLat === mapBounds._northEast.lat && cacheLocAfterMove.neLng === mapBounds._northEast.lng) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function refreshMapOnEvent() {
     "use strict";
-    updateCacheLocs(map.getBounds(), map.getZoom());
-    setTimeout(function () {
         var mapBounds, mapZoom;
         mapBounds = map.getBounds();
         mapZoom = map.getZoom();
-        if (verifyIfLocDidntChange(mapBounds, mapZoom) && evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
             ajouterWaypointsBounds(mapBounds, mapZoom);
         }
-    }, 1000);
+
 }
 
 function locateMeOnMap() {
