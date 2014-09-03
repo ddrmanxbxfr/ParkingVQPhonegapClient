@@ -114,16 +114,20 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     "use strict";
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
+
+        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swX + "/"
+        locsLoadedInMemory.swY + "/" + locsLoadedInMemory.neX + "/" + locsLoadedInMemory.neY
+
         if (zoomLevel >= 14) {
             if (reducedDataset) {
                 reducedDataset = false;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
         } else {
             if (!reducedDataset) {
                 reducedDataset = true;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
         }
     }
     var url, geojsonFeature, geoJsonToShow;
