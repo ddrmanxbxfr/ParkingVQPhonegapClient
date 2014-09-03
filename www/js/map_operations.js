@@ -130,6 +130,38 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
         }
     }
+
+    function calculerNewBounds() {
+        var newBounds;
+
+        if (latlngBounds._southWest.lng < locsLoadedInMemory.swX) {
+            newBounds._southWest.lng = latlngBounds._southWest.lng;
+        } else {
+            newBounds._southWest.lng = locsLoadedInMemory.swX;
+        }
+
+        if (latlngBounds._southWest.lat < locsLoadedInMemory.swY) {
+            newBounds._southWest.lat = latlngBounds._southWest.lat;
+        } else {
+            newBounds._southWest.lat = locsLoadedInMemory.swY;
+        }
+
+        if (latlngBounds._northEast.lng > locsLoadedInMemory.neX) {
+            newBounds._northEast.lng = latlngBounds._northEast.lng;
+        } else {
+            newBounds._northEast.lng = locsLoadedInMemory.neX;
+        }
+
+        if (latlngBounds._northEast.lat > locsLoadedInMemory.neY) {
+            newBounds._northEast.lat = latlngBounds._northEast.lat;
+        } else {
+            newBounds._northEast.lat = locsLoadedInMemory.neY;
+        }
+
+        return newBounds;
+    }
+
+
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
