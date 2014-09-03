@@ -105,12 +105,12 @@ function ajouterWaypointALaMap(geojsonMarkers) {
 
 function refreshMapOnEvent() {
     "use strict";
-        var mapBounds, mapZoom;
-        mapBounds = map.getBounds();
-        mapZoom = map.getZoom();
-        if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
-            ajouterWaypointsBounds(mapBounds, mapZoom);
-        }
+    var mapBounds, mapZoom;
+    mapBounds = map.getBounds();
+    mapZoom = map.getZoom();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        ajouterWaypointsBounds(mapBounds, mapZoom);
+    }
 
 }
 
