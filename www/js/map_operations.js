@@ -14,7 +14,7 @@ function isLocsLoadedInMemory() {
 // Obtiens la zone cache de waypoints qu'on load en memoire...
 function getBiggerBounds() {
     "use strict";
-    return 0.1;
+    return 0.05;
 }
 
 function addNonViewedBoundsToLoc(parToAdd, isItSw) {
@@ -47,6 +47,15 @@ function isPolyInBounds(swY, swX, neY, neX) {
     "use strict";
     if ((neY > locsLoadedInMemory.neY || swY > locsLoadedInMemory.swY) && (neX < locsLoadedInMemory.neX || swX < locsLoadedInMemory.swX)) {
         return true;
+    } else {
+        return false;
+    }
+}
+
+function shouldILoadUsingDelta(mapBounds, zoomLevel) {
+    "use strict";
+    if ((zoomLevel >= 14 && reducedDataset === false) || (zoomLevel < 14 && reducedDataset === true)) {
+        return true; // We still in the detailed dataset :)
     } else {
         return false;
     }
@@ -99,6 +108,42 @@ function trouverCenterFromBounds(h1, h2, b1, b2) {
     };
     return point;
 }
+
+
+function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
+    "use strict";
+
+    function getUrlForZoomLevel(latlngBounds, zoomLevel) {
+        if (zoomLevel >= 14) {
+            if (reducedDataset) {
+                reducedDataset = false;
+            }
+            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+        } else {
+            if (!reducedDataset) {
+                reducedDataset = true;
+            }
+            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+        }
+    }
+    var url, geojsonFeature, geoJsonToShow;
+    geojsonFeature = new L.GeoJSON();
+    geoJsonToShow = {};
+    url = getUrlForZoomLevel(latlngBounds, zoomLevel);
+    // console.log(url);
+    showOverlayMap();
+    $.getJSON(url, function (data) {
+        geoJsonToShow = {
+            "features": data.features,
+            "name": data.name,
+            "type": data.type
+        };
+        updateLocsInMemory(latlngBounds);
+        ajouterWaypointALaMap(geoJsonToShow);
+    });
+}
+
+
 
 function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     "use strict";

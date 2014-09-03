@@ -109,7 +109,12 @@ function refreshMapOnEvent() {
     mapBounds = map.getBounds();
     mapZoom = map.getZoom();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        if (shouldILoadUsingDelta(mapBounds, mapZoom)) { // Let's choose a strategy !
+            console.log('I need to load from delta :) ');
+            ajouterWaypointsDelta(mapBounds, mapZoom);
+        } else {
         ajouterWaypointsBounds(mapBounds, mapZoom);
+        }
     }
 
 }
