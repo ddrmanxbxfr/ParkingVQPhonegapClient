@@ -9,7 +9,6 @@ function onLocationFound(e) {
     L.marker(e.latlng).addTo(map)
         .bindPopup("Vous êtes ici").openPopup();
 
-    L.circle(e.latlng, radius).addTo(map);
     ajouterWaypointsBounds(map.getBounds());
 }
 
