@@ -131,7 +131,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
         }
     }
 
-    function calculerNewBounds() {
+    function calculerNewBounds(latlngBounds) {
         var newBounds;
 
         if (latlngBounds._southWest.lng < locsLoadedInMemory.swX) {
@@ -174,7 +174,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(latlngBounds);
+        updateLocsInMemory(calculerNewBounds(latlngBounds));
         ajouterWaypointALaMap(geoJsonToShow);
     });
 }
