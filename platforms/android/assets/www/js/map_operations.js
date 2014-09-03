@@ -43,24 +43,13 @@ function updateLocsInMemory(latlngbounds) {
     }
 }
 
-function isPointInPoly(ptLat, ptLng) {
-    // Algo trouvé sur...
-    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+function isPolyInBounds(swY, swX, neY, neX) {
     "use strict";
-    var x, y, xi, yi, xj, yj, intersect, inside;
-    x = ptLng;
-    y = ptLat;
-    inside = false;
-    xi = locsLoadedInMemory.neY;
-    yi = locsLoadedInMemory.swY;
-    xj = locsLoadedInMemory.neX;
-    yj = locsLoadedInMemory.neY;
-    intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-    if (intersect) {
-        inside = !inside;
+    if ((neY > locsLoadedInMemory.neY || swY > locsLoadedInMemory.swY) && (neX < locsLoadedInMemory.neX || swX < locsLoadedInMemory.swX)) {
+        return true;
+    } else {
+        return false;
     }
-
-    return inside;
 }
 
 function evaluateIfIShouldLoadWaypointsFromApi(mapBounds, zoomLevel) {
@@ -73,9 +62,7 @@ function evaluateIfIShouldLoadWaypointsFromApi(mapBounds, zoomLevel) {
         } else {
             if (isLocsLoadedInMemory()) {
                 if (
-                    isPointInPoly(mapBounds._southWest.lat,
-                        mapBounds._southWest.lng) && isPointInPoly(mapBounds._northEast.lat,
-                        mapBounds._northEast.lng)
+                    isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng)
                 ) {
                     return false;
                 } else {
