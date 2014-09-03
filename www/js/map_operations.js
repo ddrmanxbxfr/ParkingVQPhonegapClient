@@ -51,7 +51,7 @@ function isPointInPoly(ptLat, ptLng) {
     x = ptLng;
     y = ptLat;
     inside = false;
-    xi = locsLoadedInMemory.neY;
+    xi = locsLoadedInMemory.swX;
     yi = locsLoadedInMemory.swY;
     xj = locsLoadedInMemory.neX;
     yj = locsLoadedInMemory.neY;
