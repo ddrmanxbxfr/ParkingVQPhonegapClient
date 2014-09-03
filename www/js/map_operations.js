@@ -179,8 +179,6 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     });
 }
 
-
-
 function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     "use strict";
 
