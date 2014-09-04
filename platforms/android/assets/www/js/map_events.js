@@ -49,23 +49,62 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
 
         function getMarkerFromLocs(plng, plat, propsDoc) {
             function getMapIcon(nomProp) {
+                function validDansLesHeuresAutorise(arrHeuresAutorise) {
+                    d = new Date();
+                    n = d.getHours();
+                    for (iCpt = 0; iCpt < arrHeuresAutorise.length; iCpt = iCpt + 1) {
+                        if ( n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0] ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                var d, n, iCpt, iconToReturn;
                 switch (nomProp) {
                 case "PANNEAU_S":
-                    return L.icon({
-                        iconUrl: 'img/parkingicon.png',
-                        iconSize: [38, 38] // size of the icon
-                    });
+                    if (propsDoc.NB_MINUTES_AUTORISE !== undefined) {
+                        iconToReturn = L.icon({
+                            iconUrl: 'img/parkinggreen.png',
+                            iconSize: [38, 38] // size of the icon
+                        });
+                    } else {
+                        if (propsDoc.HEURES_AUTORISE !== undefined) {
+                            if (validDansLesHeuresAutorise(propsDoc.HEURES_AUTORISE)) {
+                                iconToReturn = L.icon({
+                                    iconUrl: 'img/parkingred.png',
+                                    iconSize: [38, 38] // size of the icon
+                                });
+                            } else {
+                                iconToReturn = L.icon({
+                                    iconUrl: 'img/parkinggreen.png',
+                                    iconSize: [38, 38] // size of the icon
+                                });
+                            }
+                        } else {
+                            iconToReturn = L.icon({
+                                iconUrl: 'img/parkingicon.png',
+                                iconSize: [38, 38] // size of the icon
+                            });
+                        }
+
+                    }
+                    break;
                 case "PARCOMETRE":
-                    return L.icon({
+                    iconToReturn = L.icon({
                         iconUrl: 'img/parcometre.png',
                         iconSize: [38, 38] // size of the icon
                     });
+                    break;
                 case "BORNES_FONTAINES":
-                    return L.icon({
+                    iconToReturn = L.icon({
                         iconUrl: 'img/bornefontaine.png',
                         iconSize: [38, 38] // size of the icon
                     });
+                    break;
                 }
+
+                return iconToReturn;
             }
             var markerToReturn = L.marker(L.latLng(plng, plat), {
                 icon: getMapIcon(propsDoc.TYPE_SRC)

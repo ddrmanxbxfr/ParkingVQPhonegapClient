@@ -107,7 +107,9 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/light-sprites2x.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/logo.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/parcometre.png \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/parkinggreen.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/parkingicon.png \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/parkingred.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/pop-up-triangle-dark.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/pop-up-triangle.png \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/img/search-bg.png \

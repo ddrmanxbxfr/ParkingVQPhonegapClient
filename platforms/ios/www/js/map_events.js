@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds, refreshMap,evaluateIfIShouldLoadWaypointsFromApi*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -9,7 +9,6 @@ function onLocationFound(e) {
     L.marker(e.latlng).addTo(map)
         .bindPopup("Vous êtes ici").openPopup();
 
-    L.circle(e.latlng, radius).addTo(map);
     ajouterWaypointsBounds(map.getBounds());
 }
 
@@ -18,27 +17,20 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
-function showOverlay() {
+function showOverlayMap() {
     "use strict";
-    var overlayToShow, cl;
     if (overlayShown === undefined || overlayShown === false) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
         setProgressBar(0);
-        if (cl.contains('off')) {
-            cl.remove('off');
-        }
+        showOverlay("overlay");
         overlayShown = true;
     }
 }
 
-function hideOverlay() {
+function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
-        overlayToShow = document.getElementById('overlay');
-        cl = overlayToShow.classList;
-        cl.add('off');
+        hideOverlay("overlay");
         overlayShown = false;
     }
 }
@@ -48,84 +40,139 @@ function configurerCssMap() {
     $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
 }
 
-function ajouterWaypointALaMap(geojsonMarkers) {
+function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     "use strict";
     var progressBar, maxZoom;
     progressBar = document.getElementById('progress_bar');
 
     function generateMarkerList(geojsonMarkers) {
-        function getMapIcon(nomProp) {
-            switch (nomProp) {
-            case "PANNEAU_S":
-                return L.icon({
-                    iconUrl: 'img/parkingicon.png',
-                    iconSize: [38, 38] // size of the icon
-                });
-            case "PARCOMETRE":
-                return L.icon({
-                    iconUrl: 'img/parcometre.png',
-                    iconSize: [38, 38] // size of the icon
-                });
-            case "BORNES_FONTAINES":
-                return L.icon({
-                    iconUrl: 'img/bornefontaine.png',
-                    iconSize: [38, 38] // size of the icon
-                });
+
+        function getMarkerFromLocs(plng, plat, propsDoc) {
+            function getMapIcon(nomProp) {
+                function validDansLesHeuresAutorise(arrHeuresAutorise) {
+                    d = new Date();
+                    n = d.getHours();
+                    for (iCpt = 0; iCpt < arrHeuresAutorise.length; iCpt = iCpt + 1) {
+                        if ( n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0] ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                var d, n, iCpt, iconToReturn;
+                switch (nomProp) {
+                case "PANNEAU_S":
+                    if (propsDoc.NB_MINUTES_AUTORISE !== undefined) {
+                        iconToReturn = L.icon({
+                            iconUrl: 'img/parkinggreen.png',
+                            iconSize: [38, 38] // size of the icon
+                        });
+                    } else {
+                        if (propsDoc.HEURES_AUTORISE !== undefined) {
+                            if (validDansLesHeuresAutorise(propsDoc.HEURES_AUTORISE)) {
+                                iconToReturn = L.icon({
+                                    iconUrl: 'img/parkingred.png',
+                                    iconSize: [38, 38] // size of the icon
+                                });
+                            } else {
+                                iconToReturn = L.icon({
+                                    iconUrl: 'img/parkinggreen.png',
+                                    iconSize: [38, 38] // size of the icon
+                                });
+                            }
+                        } else {
+                            iconToReturn = L.icon({
+                                iconUrl: 'img/parkingicon.png',
+                                iconSize: [38, 38] // size of the icon
+                            });
+                        }
+
+                    }
+                    break;
+                case "PARCOMETRE":
+                    iconToReturn = L.icon({
+                        iconUrl: 'img/parcometre.png',
+                        iconSize: [38, 38] // size of the icon
+                    });
+                    break;
+                case "BORNES_FONTAINES":
+                    iconToReturn = L.icon({
+                        iconUrl: 'img/bornefontaine.png',
+                        iconSize: [38, 38] // size of the icon
+                    });
+                    break;
+                }
+
+                return iconToReturn;
             }
+            var markerToReturn = L.marker(L.latLng(plng, plat), {
+                icon: getMapIcon(propsDoc.TYPE_SRC)
+            });
+
+            if (propsDoc.TYPE_CODE !== undefined) {
+                markerToReturn.bindPopup("<p>Information importante</p><p>" + propsDoc.TYPE_DESC + "</p>");
+            }
+
+            return markerToReturn;
         }
+
+
 
         var markerList, lenFeatures, i;
         markerList = [];
         lenFeatures = geojsonMarkers.features.length;
         for (i = 0; i < lenFeatures; i = i + 1) {
-            markerList.push(L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]), {
-                icon: getMapIcon(geojsonMarkers.features[i].properties.TYPE_SRC)
-            }));
+            markerList.push(getMarkerFromLocs(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0], geojsonMarkers.features[i].properties));
         }
         return markerList;
     }
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
-        if (elapsed > 1000) {
+        if (elapsed > 2000) {
             // if it takes more than a second to load, display the progress bar:
-            showOverlay();
+            showOverlayMap();
             progressBar.style.width = Math.round(processed / total * 100) + "%";
         }
 
         if (processed === total) {
             // all markers processed - hide the progress bar:
-            hideOverlay();
+            hideOverlayMap();
         }
     }
 
     maxZoom = map.getMaxZoom();
-    markers = L.markerClusterGroup({
-        chunkedLoading: true,
-        chunkProgress: updateProgressBar,
-        removeOutsideVisibleBounds: true,
-        disableClusteringAtZoom: maxZoom
-    });
-
-    clearWaypoints();
+    if (clearOldWaypoints) {
+        clearWaypoints();
+        markers = L.markerClusterGroup({
+            chunkedLoading: true,
+            chunkProgress: updateProgressBar,
+            removeOutsideVisibleBounds: true,
+            disableClusteringAtZoom: maxZoom
+        });
+    }
 
     markers.addLayers(generateMarkerList(geojsonMarkers));
-    map.addLayer(markers);
-}
 
-
-function clearWaypointsOnEvent() {
-    "use strict";
-    if (evaluateIfIShouldLoadWaypointsFromApi(map.getBounds())) {
-        clearWaypoints();
+    if (clearOldWaypoints) {
+        map.addLayer(markers);
     }
 }
 
 function refreshMapOnEvent() {
     "use strict";
-    var mapBounds = map.getBounds();
-    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds)) {
-        ajouterWaypointsBounds(mapBounds);
+    var mapBounds, mapZoom;
+    mapBounds = map.getBounds();
+    mapZoom = map.getZoom();
+    if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
+        if (shouldILoadUsingDelta(mapBounds, mapZoom)) { // Let's choose a strategy !
+            console.log('I need to load from delta :) ');
+            ajouterWaypointsDelta(mapBounds, mapZoom);
+        } else {
+            ajouterWaypointsBounds(mapBounds, mapZoom);
+        }
     }
+
 }
 
 function locateMeOnMap() {
@@ -141,7 +188,7 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    map = L.map('map').setView([46.80, -71.23], 11);
+    map = L.map('map').setView([46.80, -71.23], 15);
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
