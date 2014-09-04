@@ -24,7 +24,7 @@ function desactiverControlZoom() {
     map.scrollWheelZoom.disable();
     map.boxZoom.disable();
     map.keyboard.disable();
-    //$(".leaflet-control-zoom").css("visibility", "hidden");
+    $(".leaflet-control-zoom").css("visibility", "hidden");
 }
 
 function activerControlZoom() {
@@ -34,12 +34,13 @@ function activerControlZoom() {
     map.scrollWheelZoom.enable();
     map.boxZoom.enable();
     map.keyboard.enable();
-    //$(".leaflet-control-zoom").css("visibility", "visible");
+    $(".leaflet-control-zoom").css("visibility", "visible");
 }
 
 function showOverlayMap() {
     "use strict";
     if (overlayShown === undefined || overlayShown === false) {
+        desactiverControlZoom();
         setProgressBar(0);
         showOverlay("overlay");
         overlayShown = true;
@@ -50,6 +51,7 @@ function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
+        activerControlZoom();
         hideOverlay("overlay");
         overlayShown = false;
     }
