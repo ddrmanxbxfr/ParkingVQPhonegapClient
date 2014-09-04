@@ -14,7 +14,7 @@ function isLocsLoadedInMemory() {
 // Obtiens la zone cache de waypoints qu'on load en memoire...
 function getBiggerBounds() {
     "use strict";
-    return 0.00;
+    return 0.2;
 }
 
 function addNonViewedBoundsToLoc(parToAdd, isItSw) {
@@ -178,11 +178,12 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     }
 
 
-    var url, geojsonFeature, geoJsonToShow;
+    var url, geojsonFeature, geoJsonToShow, newBounds;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
     latlngBounds = addConstantNonViewToBounds(latlngBounds);
-    url = getUrlForZoomLevel(calculerNewBounds(latlngBounds), zoomLevel);
+    newBounds = calculerNewBounds(latlngBounds);
+    url = getUrlForZoomLevel(newBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
     console.log(url);
@@ -192,7 +193,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(latlngBounds);
+        updateLocsInMemory(newBounds);
         ajouterWaypointALaMap(geoJsonToShow, false);
     });
 }
