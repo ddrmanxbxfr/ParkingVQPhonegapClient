@@ -40,7 +40,7 @@ function configurerCssMap() {
     $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
 }
 
-function ajouterWaypointALaMap(geojsonMarkers) {
+function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     "use strict";
     var progressBar, maxZoom;
     progressBar = document.getElementById('progress_bar');
@@ -91,16 +91,21 @@ function ajouterWaypointALaMap(geojsonMarkers) {
     }
 
     maxZoom = map.getMaxZoom();
-    clearWaypoints();
-    markers = L.markerClusterGroup({
-        chunkedLoading: true,
-        chunkProgress: updateProgressBar,
-        removeOutsideVisibleBounds: true,
-        disableClusteringAtZoom: maxZoom
-    });
+    if (clearOldWaypoints) {
+        clearWaypoints();
+        markers = L.markerClusterGroup({
+            chunkedLoading: true,
+            chunkProgress: updateProgressBar,
+            removeOutsideVisibleBounds: true,
+            disableClusteringAtZoom: maxZoom
+        });
+    }
 
     markers.addLayers(generateMarkerList(geojsonMarkers));
-    map.addLayer(markers);
+
+    if (clearOldWaypoints) {
+        map.addLayer(markers);
+    }
 }
 
 function refreshMapOnEvent() {
@@ -113,7 +118,7 @@ function refreshMapOnEvent() {
             console.log('I need to load from delta :) ');
             ajouterWaypointsDelta(mapBounds, mapZoom);
         } else {
-        ajouterWaypointsBounds(mapBounds, mapZoom);
+            ajouterWaypointsBounds(mapBounds, mapZoom);
         }
     }
 
@@ -132,7 +137,7 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    map = L.map('map').setView([46.80, -71.23], 11);
+    map = L.map('map').setView([46.80, -71.23], 15);
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 

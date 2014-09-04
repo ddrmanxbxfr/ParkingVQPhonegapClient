@@ -14,7 +14,7 @@ function isLocsLoadedInMemory() {
 // Obtiens la zone cache de waypoints qu'on load en memoire...
 function getBiggerBounds() {
     "use strict";
-    return 0.05;
+    return 0.03;
 }
 
 function addNonViewedBoundsToLoc(parToAdd, isItSw) {
@@ -115,8 +115,8 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
 
-        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swX + "/" +
-            locsLoadedInMemory.swY + "/" + locsLoadedInMemory.neX + "/" + locsLoadedInMemory.neY;
+        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swY + "/" +
+            locsLoadedInMemory.swX + "/" + locsLoadedInMemory.neY + "/" + locsLoadedInMemory.neX;
 
         if (zoomLevel >= 14) {
             if (reducedDataset) {
@@ -132,45 +132,46 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     }
 
     function calculerNewBounds(latlngBounds) {
-        var newBounds = {
-            _southWest: {lat:undefined,
-                         lng:undefined},
-            _northEast: {lat:undefined,
-                         lng:undefined}
+        var minX, minY, maxX, maxY
+
+        minX = latlngBounds._southWest.lng;
+        minY = latlngBounds._southWest.lat;
+        maxX = latlngBounds._northEast.lng;
+        maxY = latlngBounds._northEast.lat;
+
+        if (minX > locsLoadedInMemory.swX) {
+            minX = locsLoadedInMemory.swX;
+        }
+
+        if (minY > locsLoadedInMemory.swY) {
+            minY = locsLoadedInMemory.swY;
+        }
+
+        if (maxX < locsLoadedInMemory.neX) {
+            maxX = locsLoadedInMemory.neX;
+        }
+
+        if (maxY < locsLoadedInMemory.neY) {
+            maxY = locsLoadedInmemory.neY;
+        }
+
+        return {
+            _southWest: {
+                lat: minY,
+                lng: minX
+            },
+            _northEast: {
+                lat: maxY,
+                lng: maxX
+            }
         };
-
-        if (latlngBounds._southWest.lng < locsLoadedInMemory.swX) {
-            newBounds._southWest.lng = latlngBounds._southWest.lng;
-        } else {
-            newBounds._southWest.lng = locsLoadedInMemory.swX;
-        }
-
-        if (latlngBounds._southWest.lat < locsLoadedInMemory.swY) {
-            newBounds._southWest.lat = latlngBounds._southWest.lat;
-        } else {
-            newBounds._southWest.lat = locsLoadedInMemory.swY;
-        }
-
-        if (latlngBounds._northEast.lng > locsLoadedInMemory.neX) {
-            newBounds._northEast.lng = latlngBounds._northEast.lng;
-        } else {
-            newBounds._northEast.lng = locsLoadedInMemory.neX;
-        }
-
-        if (latlngBounds._northEast.lat > locsLoadedInMemory.neY) {
-            newBounds._northEast.lat = latlngBounds._northEast.lat;
-        } else {
-            newBounds._northEast.lat = locsLoadedInMemory.neY;
-        }
-
-        return newBounds;
     }
 
 
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    url = getUrlForZoomLevel(latlngBounds, zoomLevel);
+    url = getUrlForZoomLevel(calculerNewBounds(latlngBounds), zoomLevel);
     // console.log(url);
     showOverlayMap();
     console.log(url);
@@ -180,8 +181,8 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(calculerNewBounds(latlngBounds));
-        ajouterWaypointALaMap(geoJsonToShow);
+        updateLocsInMemory(latlngBounds);
+        ajouterWaypointALaMap(geoJsonToShow, false);
     });
 }
 
@@ -190,12 +191,12 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
         if (zoomLevel >= 14) {
-            if (reducedDataset) {
+            if (reducedDataset === undefined || reducedDataset) {
                 reducedDataset = false;
             }
             return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
         } else {
-            if (!reducedDataset) {
+            if (reducedDataset === undefined || !reducedDataset) {
                 reducedDataset = true;
             }
             return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
@@ -214,6 +215,6 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             "type": data.type
         };
         updateLocsInMemory(latlngBounds);
-        ajouterWaypointALaMap(geoJsonToShow);
+        ajouterWaypointALaMap(geoJsonToShow, true);
     });
 }
