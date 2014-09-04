@@ -50,10 +50,11 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
         function getMarkerFromLocs(plng, plat, propsDoc) {
             function getMapIcon(nomProp) {
                 function validDansLesHeuresAutorise(arrHeuresAutorise) {
+                    var d, n, iCpt;
                     d = new Date();
                     n = d.getHours();
                     for (iCpt = 0; iCpt < arrHeuresAutorise.length; iCpt = iCpt + 1) {
-                        if ( n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0] ) {
+                        if (n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0]) {
                             return true;
                         }
                     }
