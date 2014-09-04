@@ -46,33 +46,45 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     progressBar = document.getElementById('progress_bar');
 
     function generateMarkerList(geojsonMarkers) {
-        function getMapIcon(nomProp) {
-            switch (nomProp) {
-            case "PANNEAU_S":
-                return L.icon({
-                    iconUrl: 'img/parkingicon.png',
-                    iconSize: [38, 38] // size of the icon
-                });
-            case "PARCOMETRE":
-                return L.icon({
-                    iconUrl: 'img/parcometre.png',
-                    iconSize: [38, 38] // size of the icon
-                });
-            case "BORNES_FONTAINES":
-                return L.icon({
-                    iconUrl: 'img/bornefontaine.png',
-                    iconSize: [38, 38] // size of the icon
-                });
+
+        function getMarkerFromLocs(plng, plat, propsDoc) {
+            function getMapIcon(nomProp) {
+                switch (nomProp) {
+                case "PANNEAU_S":
+                    return L.icon({
+                        iconUrl: 'img/parkingicon.png',
+                        iconSize: [38, 38] // size of the icon
+                    });
+                case "PARCOMETRE":
+                    return L.icon({
+                        iconUrl: 'img/parcometre.png',
+                        iconSize: [38, 38] // size of the icon
+                    });
+                case "BORNES_FONTAINES":
+                    return L.icon({
+                        iconUrl: 'img/bornefontaine.png',
+                        iconSize: [38, 38] // size of the icon
+                    });
+                }
             }
+            var markerToReturn = L.marker(L.latLng(plng, plat), {
+                icon: getMapIcon(propsDoc.TYPE_SRC)
+            });
+
+            if (propsDoc.TYPE_CODE !== undefined) {
+                markerToReturn.bindPopup("<p>Information importante</p><p>" + propsDoc.TYPE_DESC + "</p>");
+            }
+
+            return markerToReturn;
         }
+
+
 
         var markerList, lenFeatures, i;
         markerList = [];
         lenFeatures = geojsonMarkers.features.length;
         for (i = 0; i < lenFeatures; i = i + 1) {
-            markerList.push(L.marker(L.latLng(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0]), {
-                icon: getMapIcon(geojsonMarkers.features[i].properties.TYPE_SRC)
-            }));
+            markerList.push(getMarkerFromLocs(geojsonMarkers.features[i].geometry.coordinates[1], geojsonMarkers.features[i].geometry.coordinates[0], geojsonMarkers.features[i].properties));
         }
         return markerList;
     }
