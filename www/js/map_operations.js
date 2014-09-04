@@ -115,8 +115,8 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
 
-        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swX + "/"
-        locsLoadedInMemory.swY + "/" + locsLoadedInMemory.neX + "/" + locsLoadedInMemory.neY
+        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swX + "/" +
+            locsLoadedInMemory.swY + "/" + locsLoadedInMemory.neX + "/" + locsLoadedInMemory.neY;
 
         if (zoomLevel >= 14) {
             if (reducedDataset) {
@@ -168,6 +168,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
+    console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,
