@@ -14,7 +14,7 @@ function isLocsLoadedInMemory() {
 // Obtiens la zone cache de waypoints qu'on load en memoire...
 function getBiggerBounds() {
     "use strict";
-    return 0.2;
+    return 0.05;
 }
 
 function addNonViewedBoundsToLoc(parToAdd, isItSw) {

@@ -14,7 +14,7 @@ function isLocsLoadedInMemory() {
 // Obtiens la zone cache de waypoints qu'on load en memoire...
 function getBiggerBounds() {
     "use strict";
-    return 0.03;
+    return 0.05;
 }
 
 function addNonViewedBoundsToLoc(parToAdd, isItSw) {
@@ -26,19 +26,29 @@ function addNonViewedBoundsToLoc(parToAdd, isItSw) {
     }
 }
 
+
+function addConstantNonViewToBounds(platlngbounds) {
+    "use strict";
+    platlngbounds._southWest.lat = addNonViewedBoundsToLoc(platlngbounds._southWest.lat, true);
+    platlngbounds._southWest.lng = addNonViewedBoundsToLoc(platlngbounds._southWest.lng, true);
+    platlngbounds._northEast.lat = addNonViewedBoundsToLoc(platlngbounds._northEast.lat, false);
+    platlngbounds._northEast.lng = addNonViewedBoundsToLoc(platlngbounds._northEast.lng, false);
+    return platlngbounds;
+}
+
 function updateLocsInMemory(latlngbounds) {
     "use strict";
     if (locsLoadedInMemory !== undefined) {
-        locsLoadedInMemory.swY = addNonViewedBoundsToLoc(latlngbounds._southWest.lat, true);
-        locsLoadedInMemory.swX = addNonViewedBoundsToLoc(latlngbounds._southWest.lng, true);
-        locsLoadedInMemory.neY = addNonViewedBoundsToLoc(latlngbounds._northEast.lat, false);
-        locsLoadedInMemory.neX = addNonViewedBoundsToLoc(latlngbounds._northEast.lng, false);
+        locsLoadedInMemory.swY = latlngbounds._southWest.lat;
+        locsLoadedInMemory.swX = latlngbounds._southWest.lng;
+        locsLoadedInMemory.neY = latlngbounds._northEast.lat;
+        locsLoadedInMemory.neX = latlngbounds._northEast.lng;
     } else {
         locsLoadedInMemory = {
-            swY: addNonViewedBoundsToLoc(latlngbounds._southWest.lat, true),
-            swX: addNonViewedBoundsToLoc(latlngbounds._southWest.lng, true),
-            neY: addNonViewedBoundsToLoc(latlngbounds._northEast.lat, false),
-            neX: addNonViewedBoundsToLoc(latlngbounds._northEast.lng, false)
+            swY: latlngbounds._southWest.lat,
+            swX: latlngbounds._southWest.lng,
+            neY: latlngbounds._northEast.lat,
+            neX: latlngbounds._northEast.lng
         };
     }
 }
@@ -122,56 +132,58 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             if (reducedDataset) {
                 reducedDataset = false;
             }
-            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
         } else {
             if (!reducedDataset) {
                 reducedDataset = true;
             }
-            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
         }
     }
 
     function calculerNewBounds(latlngBounds) {
-        var newBounds = {
-            _southWest: {lat:undefined,
-                         lng:undefined},
-            _northEast: {lat:undefined,
-                         lng:undefined}
+        var minX, minY, maxX, maxY;
+
+        minX = latlngBounds._southWest.lng;
+        minY = latlngBounds._southWest.lat;
+        maxX = latlngBounds._northEast.lng;
+        maxY = latlngBounds._northEast.lat;
+
+        if (minX > locsLoadedInMemory.swX) {
+            minX = locsLoadedInMemory.swX;
+        }
+
+        if (minY > locsLoadedInMemory.swY) {
+            minY = locsLoadedInMemory.swY;
+        }
+
+        if (maxX < locsLoadedInMemory.neX) {
+            maxX = locsLoadedInMemory.neX;
+        }
+
+        if (maxY < locsLoadedInMemory.neY) {
+            maxY = locsLoadedInMemory.neY;
+        }
+
+        return {
+            _southWest: {
+                lat: minY,
+                lng: minX
+            },
+            _northEast: {
+                lat: maxY,
+                lng: maxX
+            }
         };
-
-        if (latlngBounds._southWest.lng < locsLoadedInMemory.swX) {
-            newBounds._southWest.lng = latlngBounds._southWest.lng;
-        } else {
-            newBounds._southWest.lng = locsLoadedInMemory.swX;
-        }
-
-        if (latlngBounds._southWest.lat < locsLoadedInMemory.swY) {
-            newBounds._southWest.lat = latlngBounds._southWest.lat;
-        } else {
-            newBounds._southWest.lat = locsLoadedInMemory.swY;
-        }
-
-        if (latlngBounds._northEast.lng > locsLoadedInMemory.neX) {
-            newBounds._northEast.lng = latlngBounds._northEast.lng;
-        } else {
-            newBounds._northEast.lng = locsLoadedInMemory.neX;
-        }
-
-        if (latlngBounds._northEast.lat > locsLoadedInMemory.neY) {
-            newBounds._northEast.lat = latlngBounds._northEast.lat;
-        } else {
-            newBounds._northEast.lat = locsLoadedInMemory.neY;
-        }
-
-        return newBounds;
     }
 
 
-    var url, geojsonFeature, geoJsonToShow;
+    var url, geojsonFeature, geoJsonToShow, newBounds;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
-    latlngBounds = calculerNewBounds(latlngBounds)
-    url = getUrlForZoomLevel(latlngBounds, zoomLevel);
+    latlngBounds = addConstantNonViewToBounds(latlngBounds);
+    newBounds = calculerNewBounds(latlngBounds);
+    url = getUrlForZoomLevel(newBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
     console.log(url);
@@ -181,8 +193,8 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(latlngBounds);
-        ajouterWaypointALaMap(geoJsonToShow);
+        updateLocsInMemory(newBounds);
+        ajouterWaypointALaMap(geoJsonToShow, false);
     });
 }
 
@@ -191,20 +203,21 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
         if (zoomLevel >= 14) {
-            if (reducedDataset) {
+            if (reducedDataset === undefined || reducedDataset) {
                 reducedDataset = false;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
         } else {
-            if (!reducedDataset) {
+            if (reducedDataset === undefined || !reducedDataset) {
                 reducedDataset = true;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
         }
     }
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
+    latlngBounds = addConstantNonViewToBounds(latlngBounds);
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
@@ -215,6 +228,6 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             "type": data.type
         };
         updateLocsInMemory(latlngBounds);
-        ajouterWaypointALaMap(geoJsonToShow);
+        ajouterWaypointALaMap(geoJsonToShow, true);
     });
 }
