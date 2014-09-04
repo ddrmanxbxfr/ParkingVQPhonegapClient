@@ -26,19 +26,29 @@ function addNonViewedBoundsToLoc(parToAdd, isItSw) {
     }
 }
 
+
+function addConstantNonViewToBounds(platlngbounds) {
+    "use strict";
+    platlngbounds._southWest.lat = addNonViewedBoundsToLoc(platlngbounds._southWest.lat, true);
+    platlngbounds._southWest.lng = addNonViewedBoundsToLoc(platlngbounds._southWest.lng, true);
+    platlngbounds._northEast.lat = addNonViewedBoundsToLoc(platlngbounds._northEast.lat, false);
+    platlngbounds._northEast.lng = addNonViewedBoundsToLoc(platlngbounds._northEast.lng, false);
+    return platlngbounds;
+}
+
 function updateLocsInMemory(latlngbounds) {
     "use strict";
     if (locsLoadedInMemory !== undefined) {
-        locsLoadedInMemory.swY = addNonViewedBoundsToLoc(latlngbounds._southWest.lat, true);
-        locsLoadedInMemory.swX = addNonViewedBoundsToLoc(latlngbounds._southWest.lng, true);
-        locsLoadedInMemory.neY = addNonViewedBoundsToLoc(latlngbounds._northEast.lat, false);
-        locsLoadedInMemory.neX = addNonViewedBoundsToLoc(latlngbounds._northEast.lng, false);
+        locsLoadedInMemory.swY = latlngbounds._southWest.lat;
+        locsLoadedInMemory.swX = latlngbounds._southWest.lng;
+        locsLoadedInMemory.neY = latlngbounds._northEast.lat;
+        locsLoadedInMemory.neX = latlngbounds._northEast.lng;
     } else {
         locsLoadedInMemory = {
-            swY: addNonViewedBoundsToLoc(latlngbounds._southWest.lat, true),
-            swX: addNonViewedBoundsToLoc(latlngbounds._southWest.lng, true),
-            neY: addNonViewedBoundsToLoc(latlngbounds._northEast.lat, false),
-            neX: addNonViewedBoundsToLoc(latlngbounds._northEast.lng, false)
+            swY: latlngbounds._southWest.lat,
+            swX: latlngbounds._southWest.lng,
+            neY: latlngbounds._northEast.lat,
+            neX: latlngbounds._northEast.lng
         };
     }
 }
@@ -122,17 +132,17 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             if (reducedDataset) {
                 reducedDataset = false;
             }
-            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
         } else {
             if (!reducedDataset) {
                 reducedDataset = true;
             }
-            return baseUrl + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
         }
     }
 
     function calculerNewBounds(latlngBounds) {
-        var minX, minY, maxX, maxY
+        var minX, minY, maxX, maxY;
 
         minX = latlngBounds._southWest.lng;
         minY = latlngBounds._southWest.lat;
@@ -152,7 +162,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
         }
 
         if (maxY < locsLoadedInMemory.neY) {
-            maxY = locsLoadedInmemory.neY;
+            maxY = locsLoadedInMemory.neY;
         }
 
         return {
@@ -171,6 +181,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
+    latlngBounds = addConstantNonViewToBounds(latlngBounds);
     url = getUrlForZoomLevel(calculerNewBounds(latlngBounds), zoomLevel);
     // console.log(url);
     showOverlayMap();
@@ -194,17 +205,18 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             if (reducedDataset === undefined || reducedDataset) {
                 reducedDataset = false;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=5";
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
         } else {
             if (reducedDataset === undefined || !reducedDataset) {
                 reducedDataset = true;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lat, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._southWest.lng, true) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lat, false) + "/" + addNonViewedBoundsToLoc(latlngBounds._northEast.lng, false) + "?roundloc=2";
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
         }
     }
     var url, geojsonFeature, geoJsonToShow;
     geojsonFeature = new L.GeoJSON();
     geoJsonToShow = {};
+    latlngBounds = addConstantNonViewToBounds(latlngBounds);
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
