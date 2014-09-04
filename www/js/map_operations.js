@@ -132,7 +132,12 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     }
 
     function calculerNewBounds(latlngBounds) {
-        var newBounds;
+        var newBounds = {
+            _southWest: {lat:undefined,
+                         lng:undefined},
+            _northEast: {lat:undefined,
+                         lng:undefined}
+        };
 
         if (latlngBounds._southWest.lng < locsLoadedInMemory.swX) {
             newBounds._southWest.lng = latlngBounds._southWest.lng;
