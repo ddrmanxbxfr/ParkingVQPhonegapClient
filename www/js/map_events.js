@@ -18,21 +18,23 @@ function setProgressBar(percentProgress) {
 }
 
 function desactiverControlZoom() {
+    "use strict";
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.scrollWheelZoom.disable();
     map.boxZoom.disable();
     map.keyboard.disable();
-    $(".leaflet-control-zoom").css("visibility", "hidden");
+    //$(".leaflet-control-zoom").css("visibility", "hidden");
 }
 
 function activerControlZoom() {
+    "use strict";
     map.touchZoom.enable();
     map.doubleClickZoom.enable();
     map.scrollWheelZoom.enable();
     map.boxZoom.enable();
     map.keyboard.enable();
-    $(".leaflet-control-zoom").css("visibility", "visible");
+    //$(".leaflet-control-zoom").css("visibility", "visible");
 }
 
 function showOverlayMap() {
