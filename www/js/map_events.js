@@ -189,8 +189,7 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    map = L.map('map').setView([46.80, -71.23], 15);
-
+    map = L.map('map', {attributionControl: false}).setView([46.80, -71.23], 15);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
     }).addTo(map);
