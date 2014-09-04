@@ -53,7 +53,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
                     d = new Date();
                     n = d.getHours();
                     for (iCpt = 0; iCpt < arrHeuresAutorise.length; iCpt = iCpt + 1) {
-                        if (arrHeuresAutorise[iCpt][0] > n || arrHeuresAutorise[iCpt][0] < n) {
+                        if ( n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0] ) {
                             return true;
                         }
                     }
