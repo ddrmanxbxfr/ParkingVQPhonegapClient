@@ -17,6 +17,24 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
+function desactiverControlZoom() {
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.boxZoom.disable();
+    map.keyboard.disable();
+    $(".leaflet-control-zoom").css("visibility", "hidden");
+}
+
+function activerControlZoom() {
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+    map.boxZoom.enable();
+    map.keyboard.enable();
+    $(".leaflet-control-zoom").css("visibility", "visible");
+}
+
 function showOverlayMap() {
     "use strict";
     if (overlayShown === undefined || overlayShown === false) {
@@ -189,7 +207,9 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    map = L.map('map', {attributionControl: false}).setView([46.80, -71.23], 15);
+    map = L.map('map', {
+        attributionControl: false
+    }).setView([46.80, -71.23], 15);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
     }).addTo(map);
