@@ -13,7 +13,7 @@ $('#btnLegend').click(function () {
 
 $('#btnShowMap').click(function () {
     "use strict";
-    templateShowMap();
+    locateMeOnMap();
 });
 
 $('#btnLegendClose').click(function () {
