@@ -1,14 +1,21 @@
 /*jslint nomen: true*/
 /*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta, configurerCssMap,
 doOnOrientationChange*/
-var map, markers, overlayShown;
+var map, markers, overlayShown, currentLocationMarker;
 
 function onLocationFound(e) {
     "use strict";
     var radius = e.accuracy / 2;
-
-    L.marker(e.latlng).addTo(map)
-        .bindPopup("Vous êtes ici").openPopup();
+    if (currentLocationMarker === undefined) {
+        currentLocationMarker = L.marker(e.latlng).addTo(map)
+            .bindPopup("Vous êtes ici").openPopup();
+    } else {
+        if (currentLocationMarker.getLatLng() !== e.latlng) {
+            // Si on c'est deplacer il faut aussi deplacer le marker.
+            map.removeLayer(currentLocationMarker);
+            currentLocationMarker = L.marker(e.latlng).addTo(map).bindPopup("Vous êtes ici").openPopup();
+        }
+    }
 }
 
 function setProgressBar(percentProgress) {
@@ -189,7 +196,6 @@ function refreshMapOnEvent() {
             ajouterWaypointsBounds(mapBounds, mapZoom);
         }
     }
-
 }
 
 function locateMeOnMap() {
