@@ -15,3 +15,8 @@ function hideOverlay(overlayName) {
     cl = overlayToShow.classList;
     cl.add('off');
 }
+
+function configurerCssMap() {
+    "use strict";
+    $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
+}

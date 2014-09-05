@@ -15,6 +15,20 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
+function doOnOrientationChange()
+  {
+    switch(window.orientation)
+    {
+      case -90:
+      case 90:
+        alert('landscape');
+        break;
+      default:
+        alert('portrait');
+        break;
+    }
+  }
+
 function desactiverControlZoom() {
     "use strict";
     map.touchZoom.disable();
@@ -53,11 +67,6 @@ function hideOverlayMap() {
         hideOverlay("overlay");
         overlayShown = false;
     }
-}
-
-function configurerCssMap() {
-    "use strict";
-    $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
 }
 
 function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
