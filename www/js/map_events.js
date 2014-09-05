@@ -1,5 +1,6 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta, configurerCssMap*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta, configurerCssMap,
+doOnOrientationChange*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
