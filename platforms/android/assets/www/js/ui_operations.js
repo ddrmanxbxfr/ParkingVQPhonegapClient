@@ -27,11 +27,11 @@ function doOnOrientationChange() {
     switch (window.orientation) {
     case -90:
     case 90:
-        //alert('landscape');
+        // This is landscape mode
         configurerCssMap();
         break;
     default:
-        //        alert('portrait');
+        // This is portrait mode
         configurerCssMap();
         break;
     }
