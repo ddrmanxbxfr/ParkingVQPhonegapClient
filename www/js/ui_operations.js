@@ -1,3 +1,4 @@
+/*global $ */
 function showOverlay(overlayName) {
     "use strict";
     var overlayToShow, cl;
