@@ -1,5 +1,5 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta, configurerCssMap*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -203,7 +203,9 @@ function locateMeOnMap() {
 
 function initMap() {
     "use strict";
+    window.addEventListener('orientationchange', doOnOrientationChange);
     configurerCssMap();
+
     map = L.map('map', {
         attributionControl: false
     }).setView([46.80, -71.23], 15);
