@@ -1,5 +1,6 @@
 /*jslint nomen: true*/
-/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta*/
+/*global L,$,console, clearWaypoints, ajouterWaypointsBounds,showOverlay,hideOverlay, refreshMap,reducedDataset,evaluateIfIShouldLoadWaypointsFromApi, ajouterWaypointsDelta, shouldILoadUsingDelta, configurerCssMap,
+doOnOrientationChange*/
 var map, markers, overlayShown;
 
 function onLocationFound(e) {
@@ -8,8 +9,6 @@ function onLocationFound(e) {
 
     L.marker(e.latlng).addTo(map)
         .bindPopup("Vous êtes ici").openPopup();
-
-    ajouterWaypointsBounds(map.getBounds());
 }
 
 function setProgressBar(percentProgress) {
@@ -55,11 +54,6 @@ function hideOverlayMap() {
         hideOverlay("overlay");
         overlayShown = false;
     }
-}
-
-function configurerCssMap() {
-    "use strict";
-    $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
 }
 
 function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
@@ -210,7 +204,9 @@ function locateMeOnMap() {
 
 function initMap() {
     "use strict";
+    window.addEventListener('orientationchange', doOnOrientationChange);
     configurerCssMap();
+
     map = L.map('map', {
         attributionControl: false
     }).setView([46.80, -71.23], 15);

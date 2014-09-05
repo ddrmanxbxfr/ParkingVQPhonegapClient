@@ -1,3 +1,4 @@
+/*global $ */
 function showOverlay(overlayName) {
     "use strict";
     var overlayToShow, cl;
@@ -14,4 +15,24 @@ function hideOverlay(overlayName) {
     overlayToShow = document.getElementById(overlayName);
     cl = overlayToShow.classList;
     cl.add('off');
+}
+
+function configurerCssMap() {
+    "use strict";
+    $("#map").height($(window).height() - $("#titleTopBar").height()).width($(window).width());
+}
+
+function doOnOrientationChange() {
+    "use strict";
+    switch (window.orientation) {
+    case -90:
+    case 90:
+        //alert('landscape');
+        configurerCssMap();
+        break;
+    default:
+        //        alert('portrait');
+        configurerCssMap();
+        break;
+    }
 }
