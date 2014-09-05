@@ -17,9 +17,30 @@ function setProgressBar(percentProgress) {
     document.getElementById('progress_bar').style.width = percentProgress + '%';
 }
 
+function desactiverControlZoom() {
+    "use strict";
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.boxZoom.disable();
+    map.keyboard.disable();
+    $(".leaflet-control-zoom").css("visibility", "hidden");
+}
+
+function activerControlZoom() {
+    "use strict";
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+    map.boxZoom.enable();
+    map.keyboard.enable();
+    $(".leaflet-control-zoom").css("visibility", "visible");
+}
+
 function showOverlayMap() {
     "use strict";
     if (overlayShown === undefined || overlayShown === false) {
+        desactiverControlZoom();
         setProgressBar(0);
         showOverlay("overlay");
         overlayShown = true;
@@ -30,6 +51,7 @@ function hideOverlayMap() {
     "use strict";
     var overlayToShow, cl;
     if (overlayShown) {
+        activerControlZoom();
         hideOverlay("overlay");
         overlayShown = false;
     }
@@ -54,7 +76,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
                     d = new Date();
                     n = d.getHours();
                     for (iCpt = 0; iCpt < arrHeuresAutorise.length; iCpt = iCpt + 1) {
-                        if (n > arrHeuresAutorise[iCpt][0]  && n < arrHeuresAutorise[iCpt][0]) {
+                        if (n > arrHeuresAutorise[iCpt][0] && n < arrHeuresAutorise[iCpt][1]) {
                             return true;
                         }
                     }
@@ -189,8 +211,9 @@ function locateMeOnMap() {
 function initMap() {
     "use strict";
     configurerCssMap();
-    map = L.map('map').setView([46.80, -71.23], 15);
-
+    map = L.map('map', {
+        attributionControl: false
+    }).setView([46.80, -71.23], 15);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
     }).addTo(map);

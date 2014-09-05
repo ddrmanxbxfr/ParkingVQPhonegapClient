@@ -8,8 +8,6 @@ function onLocationFound(e) {
 
     L.marker(e.latlng).addTo(map)
         .bindPopup("Vous êtes ici").openPopup();
-
-    ajouterWaypointsBounds(map.getBounds());
 }
 
 function setProgressBar(percentProgress) {
