@@ -24,15 +24,5 @@ function configurerCssMap() {
 
 function doOnOrientationChange() {
     "use strict";
-    switch (window.orientation) {
-    case -90:
-    case 90:
-        // This is landscape mode
-        configurerCssMap();
-        break;
-    default:
-        // This is portrait mode
-        configurerCssMap();
-        break;
-    }
+    configurerCssMap();
 }
