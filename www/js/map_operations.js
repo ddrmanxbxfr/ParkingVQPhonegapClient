@@ -102,8 +102,8 @@ function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
         reducedDataset = false;
         updateLocsInMemory({
             _southWest: {
-                lat: detailedOldLocs.seY,
-                lng: detailedOldLocs.seX
+                lat: detailedOldLocs.swY,
+                lng: detailedOldLocs.swX
             },
             _northEast: {
                 lat: detailedOldLocs.neY,
@@ -116,8 +116,8 @@ function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
             reducedDataset = true;
             updateLocsInMemory({
             _southWest: {
-                lat: reducedOldLocs.seY,
-                lng: reducedOldLocs.seX
+                lat: reducedOldLocs.swY,
+                lng: reducedOldLocs.swX
             },
             _northEast: {
                 lat: reducedOldLocs.neY,
