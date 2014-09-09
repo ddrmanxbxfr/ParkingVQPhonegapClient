@@ -1,7 +1,7 @@
 /*jslint nomen: true*/
 /*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlayMap*/
-var locsLoadedInMemory, reducedDataset, detailedData, reducedData, detailedOldLocs, reducedOldLocs;
-
+var locsLoadedInMemory, reducedDataset, oldData, detailedOldLocs, reducedOldLocs;
+oldData = [];
 function isLocsLoadedInMemory() {
     "use strict";
     if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
@@ -36,7 +36,7 @@ function addConstantNonViewToBounds(platlngbounds) {
     return platlngbounds;
 }
 
-function updateLocsInMemory(latlngbounds, isThisReducedDataset, geojsonMarkers) {
+function updateLocsInMemory(latlngbounds, isThisReducedDataset) {
     "use strict";
     if (locsLoadedInMemory !== undefined) {
         locsLoadedInMemory.swY = latlngbounds._southWest.lat;
@@ -53,7 +53,6 @@ function updateLocsInMemory(latlngbounds, isThisReducedDataset, geojsonMarkers) 
     }
 
     if (isThisReducedDataset) {
-        reducedData = geojsonMarkers;
         reducedOldLocs = {
             swY: latlngbounds._southWest.lat,
             swX: latlngbounds._southWest.lng,
@@ -61,7 +60,6 @@ function updateLocsInMemory(latlngbounds, isThisReducedDataset, geojsonMarkers) 
             neX: latlngbounds._northEast.lng
         };
     } else {
-        detailedData = geojsonMarkers;
         detailedOldLocs = {
             swY: latlngbounds._southWest.lat,
             swX: latlngbounds._southWest.lng,
@@ -85,10 +83,10 @@ function canIBringBackTheOldLocs(mapBounds, zoomLevel) {
         return false; // We still in the detailed dataset :)
     } else {
         // Check what we are dealing with
-        if ((zoomLevel >= 14 && reducedDataset === true) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, detailedOldLocs)) {
+        if ((zoomLevel >= 14 && reducedDataset === true) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, detailedOldLocs) && oldData[false] !== undefined) {
             return true; // Map bounds still in the old locs :)
         } else {
-            if ((zoomLevel < 14 && reducedDataset === false) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, reducedOldLocs)) {
+            if ((zoomLevel < 14 && reducedDataset === false) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, reducedOldLocs) && oldData[true] !== undefined) {
                 return true;
             } else {
                 return false;
@@ -109,8 +107,8 @@ function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
                 lat: detailedOldLocs.neY,
                 lng: detailedOldLocs.neX
             }
-        }, reducedDataset, detailedData);
-        ajouterWaypointALaMap(detailedData, true);
+        }, reducedDataset);
+        addWaypointsFromOldData();
     } else {
         if (zoomLevel < 14 && reducedDataset === false) {
             reducedDataset = true;
@@ -123,8 +121,8 @@ function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
                 lat: reducedOldLocs.neY,
                 lng: reducedOldLocs.neX
             }
-        }, reducedDataset, reducedData);
-            ajouterWaypointALaMap(reducedData, true);
+        }, reducedDataset);
+            addWaypointsFromOldData();
         }
     }
 }
@@ -262,7 +260,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(newBounds, reducedDataset, geoJsonToShow);
+        updateLocsInMemory(newBounds, reducedDataset);
         ajouterWaypointALaMap(geoJsonToShow, false);
     });
 }
@@ -297,7 +295,7 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             "type": data.type
         };
 
-        updateLocsInMemory(latlngBounds, reducedDataset, geoJsonToShow);
+        updateLocsInMemory(latlngBounds, reducedDataset);
         ajouterWaypointALaMap(geoJsonToShow, true);
     });
 }

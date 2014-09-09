@@ -166,6 +166,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
 
     maxZoom = map.getMaxZoom();
     if (clearOldWaypoints) {
+        oldData[reducedDataset] = markers;
         clearWaypoints();
         markers = L.markerClusterGroup({
             chunkedLoading: true,
@@ -180,6 +181,29 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     if (clearOldWaypoints) {
         map.addLayer(markers);
     }
+}
+
+function addWaypointsFromOldData() {
+     var progressBar, maxZoom;
+    progressBar = document.getElementById('progress_bar');
+
+    function updateProgressBar(processed, total, elapsed, layersArray) {
+        if (elapsed > 2000) {
+            // if it takes more than a second to load, display the progress bar:
+            showOverlayMap();
+            progressBar.style.width = Math.round(processed / total * 100) + "%";
+        }
+
+        if (processed === total) {
+            // all markers processed - hide the progress bar:
+            hideOverlayMap();
+        }
+    }
+
+    maxZoom = map.getMaxZoom();
+    clearWaypoints();
+    markers = oldData[!reducedDataset]
+    map.addLayer(markers);
 }
 
 function refreshMapOnEvent() {
