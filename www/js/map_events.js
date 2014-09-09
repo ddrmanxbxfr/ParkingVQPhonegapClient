@@ -69,7 +69,6 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     progressBar = document.getElementById('progress_bar');
 
     function generateMarkerList(geojsonMarkers) {
-
         function getMarkerFromLocs(plng, plat, propsDoc) {
             function getMapIcon(nomProp) {
                 function validDansLesHeuresAutorise(arrHeuresAutorise) {
@@ -189,11 +188,14 @@ function refreshMapOnEvent() {
     mapBounds = map.getBounds();
     mapZoom = map.getZoom();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
-        if (shouldILoadUsingDelta(mapBounds, mapZoom)) { // Let's choose a strategy !
-            console.log('I need to load from delta :) ');
-            ajouterWaypointsDelta(mapBounds, mapZoom);
+        if (canIBringBackTheOldLocs(mapBounds, mapZoom)) {
+            bringBackTheCachedWaypoints(mapBounds, mapZoom);
         } else {
-            ajouterWaypointsBounds(mapBounds, mapZoom);
+            if (shouldILoadUsingDelta(mapBounds, mapZoom)) { // Let's choose a strategy !
+                ajouterWaypointsDelta(mapBounds, mapZoom);
+            } else {
+                ajouterWaypointsBounds(mapBounds, mapZoom);
+            }
         }
     }
 }

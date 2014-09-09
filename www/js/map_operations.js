@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlayMap*/
-var locsLoadedInMemory, reducedDataset;
+var locsLoadedInMemory, reducedDataset, detailedData, reducedData, detailedOldLocs, reducedOldLocs;
 
 function isLocsLoadedInMemory() {
     "use strict";
@@ -36,7 +36,7 @@ function addConstantNonViewToBounds(platlngbounds) {
     return platlngbounds;
 }
 
-function updateLocsInMemory(latlngbounds) {
+function updateLocsInMemory(latlngbounds, isThisReducedDataset, geojsonMarkers) {
     "use strict";
     if (locsLoadedInMemory !== undefined) {
         locsLoadedInMemory.swY = latlngbounds._southWest.lat;
@@ -51,16 +51,85 @@ function updateLocsInMemory(latlngbounds) {
             neX: latlngbounds._northEast.lng
         };
     }
+
+    if (isThisReducedDataset) {
+        reducedData = geojsonMarkers;
+        reducedOldLocs = {
+            swY: latlngbounds._southWest.lat,
+            swX: latlngbounds._southWest.lng,
+            neY: latlngbounds._northEast.lat,
+            neX: latlngbounds._northEast.lng
+        };
+    } else {
+        detailedData = geojsonMarkers;
+        detailedOldLocs = {
+            swY: latlngbounds._southWest.lat,
+            swX: latlngbounds._southWest.lng,
+            neY: latlngbounds._northEast.lat,
+            neX: latlngbounds._northEast.lng
+        };
+    }
 }
 
-function isPolyInBounds(swY, swX, neY, neX) {
+function isPolyInBounds(swY, swX, neY, neX, locsToWorkOn) {
     "use strict";
-    if ((neY > locsLoadedInMemory.neY || swY > locsLoadedInMemory.swY) && (neX < locsLoadedInMemory.neX || swX < locsLoadedInMemory.swX)) {
+    if (locsToWorkOn !== undefined && (neY > locsToWorkOn.neY || swY > locsToWorkOn.swY) && (neX < locsToWorkOn.neX || swX < locsToWorkOn.swX)) {
         return true;
     } else {
         return false;
     }
 }
+
+function canIBringBackTheOldLocs(mapBounds, zoomLevel) {
+    if ((zoomLevel >= 14 && reducedDataset === false) || (zoomLevel < 14 && reducedDataset === true)) {
+        return false; // We still in the detailed dataset :)
+    } else {
+        // Check what we are dealing with
+        if ((zoomLevel >= 14 && reducedDataset === true) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, detailedOldLocs)) {
+            return true; // Map bounds still in the old locs :)
+        } else {
+            if ((zoomLevel < 14 && reducedDataset === false) && isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, reducedOldLocs)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
+function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
+    if (zoomLevel >= 14 && reducedDataset) {
+        reducedDataset = false;
+        updateLocsInMemory({
+            _southWest: {
+                lat: detailedOldLocs.seY,
+                lng: detailedOldLocs.seX
+            },
+            _northEast: {
+                lat: detailedOldLocs.neY,
+                lng: detailedOldLocs.neX
+            }
+        }, reducedDataset, detailedData);
+        ajouterWaypointALaMap(detailedData, true);
+    } else {
+        if (zoomLevel < 14 && reducedDataset === false) {
+            reducedDataset = true;
+            updateLocsInMemory({
+            _southWest: {
+                lat: reducedOldLocs.seY,
+                lng: reducedOldLocs.seX
+            },
+            _northEast: {
+                lat: reducedOldLocs.neY,
+                lng: reducedOldLocs.neX
+            }
+        }, reducedDataset, reducedData);
+            ajouterWaypointALaMap(reducedData, true);
+        }
+    }
+}
+
+
 
 function shouldILoadUsingDelta(mapBounds, zoomLevel) {
     "use strict";
@@ -81,7 +150,7 @@ function evaluateIfIShouldLoadWaypointsFromApi(mapBounds, zoomLevel) {
         } else {
             if (isLocsLoadedInMemory()) {
                 if (
-                    isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng)
+                    isPolyInBounds(mapBounds._southWest.lat, mapBounds._southWest.lng, mapBounds._northEast.lat, mapBounds._northEast.lng, locsLoadedInMemory)
                 ) {
                     return false;
                 } else {
@@ -186,14 +255,14 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     url = getUrlForZoomLevel(newBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
-    console.log(url);
+    //console.log(url);
     $.getJSON(url, function (data) {
         geoJsonToShow = {
             "features": data.features,
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(newBounds);
+        updateLocsInMemory(newBounds, reducedDataset, geoJsonToShow);
         ajouterWaypointALaMap(geoJsonToShow, false);
     });
 }
@@ -227,7 +296,8 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             "name": data.name,
             "type": data.type
         };
-        updateLocsInMemory(latlngBounds);
+
+        updateLocsInMemory(latlngBounds, reducedDataset, geoJsonToShow);
         ajouterWaypointALaMap(geoJsonToShow, true);
     });
 }
