@@ -184,7 +184,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
 }
 
 function addWaypointsFromOldData() {
-     var progressBar, maxZoom;
+    var progressBar, maxZoom;
     progressBar = document.getElementById('progress_bar');
 
     function updateProgressBar(processed, total, elapsed, layersArray) {
