@@ -166,7 +166,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
 
     maxZoom = map.getMaxZoom();
     if (clearOldWaypoints) {
-        oldData[reducedDataset] = markers;
+      //  oldData[reducedDataset] = markers;
         clearWaypoints();
         markers = L.markerClusterGroup({
             chunkedLoading: true,
@@ -177,7 +177,7 @@ function ajouterWaypointALaMap(geojsonMarkers, clearOldWaypoints) {
     }
 
     markers.addLayers(generateMarkerList(geojsonMarkers));
-
+    oldData[!reducedDataset] = markers;
     if (clearOldWaypoints) {
         map.addLayer(markers);
     }
