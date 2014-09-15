@@ -1,4 +1,4 @@
-/*global $,showOverlay,hideOverlay*/
+/*global $, showOverlay, hideOverlay, locateMeOnMap*/
 // Ce script change le contenu disponible !
 
 function templateShowMap() {
@@ -13,7 +13,7 @@ $('#btnLegend').click(function () {
 
 $('#btnShowMap').click(function () {
     "use strict";
-    templateShowMap();
+    locateMeOnMap();
 });
 
 $('#btnLegendClose').click(function () {

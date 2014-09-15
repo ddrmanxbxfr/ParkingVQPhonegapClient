@@ -2,6 +2,7 @@
 /*global L,$,console, markers, map, ajouterWaypointALaMap, showOverlayMap*/
 var locsLoadedInMemory, reducedDataset, oldData, detailedOldLocs, reducedOldLocs;
 oldData = [];
+
 function isLocsLoadedInMemory() {
     "use strict";
     if (locsLoadedInMemory !== undefined && locsLoadedInMemory.swX !== undefined && locsLoadedInMemory.swY !== undefined && locsLoadedInMemory.neX !== undefined && locsLoadedInMemory.neY !== undefined) {
@@ -113,15 +114,15 @@ function bringBackTheCachedWaypoints(mapBounds, zoomLevel) {
         if (zoomLevel < 14 && reducedDataset === false) {
             reducedDataset = true;
             updateLocsInMemory({
-            _southWest: {
-                lat: reducedOldLocs.swY,
-                lng: reducedOldLocs.swX
-            },
-            _northEast: {
-                lat: reducedOldLocs.neY,
-                lng: reducedOldLocs.neX
-            }
-        }, reducedDataset);
+                _southWest: {
+                    lat: reducedOldLocs.swY,
+                    lng: reducedOldLocs.swX
+                },
+                _northEast: {
+                    lat: reducedOldLocs.neY,
+                    lng: reducedOldLocs.neX
+                }
+            }, reducedDataset);
             addWaypointsFromOldData();
         }
     }
@@ -254,11 +255,13 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     // console.log(url);
     showOverlayMap();
     //console.log(url);
-    $.getJSON(url, function (data) {
+
+    $.get(url, function (data) {
+        var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
-            "features": data.features,
-            "name": data.name,
-            "type": data.type
+            "features": unpackData.features,
+            "name": unpackData.name,
+            "type": unpackData.type
         };
         updateLocsInMemory(newBounds, reducedDataset);
         ajouterWaypointALaMap(geoJsonToShow, false);
@@ -288,11 +291,12 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
-    $.getJSON(url, function (data) {
+    $.get(url, function (data) {
+                var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
-            "features": data.features,
-            "name": data.name,
-            "type": data.type
+            "features": unpackData.features,
+            "name": unpackData.name,
+            "type": unpackData.type
         };
 
         updateLocsInMemory(latlngBounds, reducedDataset);

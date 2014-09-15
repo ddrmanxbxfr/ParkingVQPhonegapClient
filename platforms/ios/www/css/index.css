@@ -11,3 +11,7 @@ body, .topcoat-navigation-bar, .topcoat-tab-bar__button{
 ul {
     list-style: none;
 }
+
+.enable_scrolling {
+    overflow: auto
+}
