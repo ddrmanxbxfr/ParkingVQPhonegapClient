@@ -13,7 +13,7 @@ function isLocsLoadedInMemory() {
 }
 
 // Obtiens la zone cache de waypoints qu'on load en memoire...
-function getBiggerBounds() {
+function getBiggerBounds(isReduced) {
     "use strict";
     return 0.05;
 }
@@ -257,11 +257,11 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     //console.log(url);
 
     $.get(url, function (data) {
-        var jsonParsed = JSON.parse(RJSON.unpack(data));
+        var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
-            "features": jsonParsed.features,
-            "name": jsonParsed.name,
-            "type": jsonParsed.type
+            "features": unpackData.features,
+            "name": unpackData.name,
+            "type": unpackData.type
         };
         updateLocsInMemory(newBounds, reducedDataset);
         ajouterWaypointALaMap(geoJsonToShow, false);
@@ -281,7 +281,7 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             if (reducedDataset === undefined || !reducedDataset) {
                 reducedDataset = true;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
+            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=3";
         }
     }
     var url, geojsonFeature, geoJsonToShow;
@@ -292,11 +292,11 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     // console.log(url);
     showOverlayMap();
     $.get(url, function (data) {
-        var jsonParsed = JSON.parse(RJSON.unpack(data));
+                var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
-            "features": jsonParsed.features,
-            "name": jsonParsed.name,
-            "type": jsonParsed.type
+            "features": unpackData.features,
+            "name": unpackData.name,
+            "type": unpackData.type
         };
 
         updateLocsInMemory(latlngBounds, reducedDataset);

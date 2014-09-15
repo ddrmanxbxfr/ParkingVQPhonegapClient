@@ -127,6 +127,7 @@
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/leaflet.markercluster-src.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/map_events.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/map_operations.js \
+/Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/RJSON.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/setEvents.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/ui_operations.js \
 /Users/ddrmanxbxfr/prog/apes_parking/parking-web/platforms/android/assets/www/js/zepto.min.js \

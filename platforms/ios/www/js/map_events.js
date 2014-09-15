@@ -212,15 +212,15 @@ function refreshMapOnEvent() {
     mapBounds = map.getBounds();
     mapZoom = map.getZoom();
     if (evaluateIfIShouldLoadWaypointsFromApi(mapBounds, mapZoom)) {
-        if (canIBringBackTheOldLocs(mapBounds, mapZoom)) {
+        /*if (canIBringBackTheOldLocs(mapBounds, mapZoom)) {
             bringBackTheCachedWaypoints(mapBounds, mapZoom);
-        } else {
+        } else {*/
             if (shouldILoadUsingDelta(mapBounds, mapZoom)) { // Let's choose a strategy !
                 ajouterWaypointsDelta(mapBounds, mapZoom);
             } else {
                 ajouterWaypointsBounds(mapBounds, mapZoom);
             }
-        }
+        //}
     }
 }
 

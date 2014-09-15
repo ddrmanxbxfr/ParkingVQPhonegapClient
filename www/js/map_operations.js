@@ -13,7 +13,7 @@ function isLocsLoadedInMemory() {
 }
 
 // Obtiens la zone cache de waypoints qu'on load en memoire...
-function getBiggerBounds() {
+function getBiggerBounds(isReduced) {
     "use strict";
     return 0.05;
 }
@@ -193,14 +193,14 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
 
     function getUrlForZoomLevel(latlngBounds, zoomLevel) {
 
-        var baseUrl = "http://vps84512.ovh.net:4711/api/parking/" + locsLoadedInMemory.swY + "/" +
+        var baseUrl = "http://vps96385.ovh.net:4711/api/parking/" + locsLoadedInMemory.swY + "/" +
             locsLoadedInMemory.swX + "/" + locsLoadedInMemory.neY + "/" + locsLoadedInMemory.neX;
 
         if (zoomLevel >= 14) {
             if (reducedDataset) {
                 reducedDataset = false;
             }
-            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=5";
+            return baseUrl + "/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=4";
         } else {
             if (!reducedDataset) {
                 reducedDataset = true;
@@ -256,7 +256,7 @@ function ajouterWaypointsDelta(latlngBounds, zoomLevel) {
     showOverlayMap();
     //console.log(url);
 
-    $.get(url, function (data) {
+    $.getJSON(url, function (data) {
         var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
             "features": unpackData.features,
@@ -276,12 +276,12 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
             if (reducedDataset === undefined || reducedDataset) {
                 reducedDataset = false;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=4";
+            return "http://vps96385.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=4";
         } else {
             if (reducedDataset === undefined || !reducedDataset) {
                 reducedDataset = true;
             }
-            return "http://vps84512.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
+            return "http://vps96385.ovh.net:4711/api/parking/" + latlngBounds._southWest.lat + "/" + latlngBounds._southWest.lng + "/" + latlngBounds._northEast.lat + "/" + latlngBounds._northEast.lng + "?roundloc=2";
         }
     }
     var url, geojsonFeature, geoJsonToShow;
@@ -291,8 +291,8 @@ function ajouterWaypointsBounds(latlngBounds, zoomLevel) {
     url = getUrlForZoomLevel(latlngBounds, zoomLevel);
     // console.log(url);
     showOverlayMap();
-    $.get(url, function (data) {
-                var unpackData = RJSON.unpack(data);
+    $.getJSON(url, function (data) {
+        var unpackData = RJSON.unpack(data);
         geoJsonToShow = {
             "features": unpackData.features,
             "name": unpackData.name,
