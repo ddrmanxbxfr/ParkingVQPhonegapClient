@@ -72,7 +72,7 @@ function updateLocsInMemory(latlngbounds, isThisReducedDataset) {
 
 function isPolyInBounds(swY, swX, neY, neX, locsToWorkOn) {
     "use strict";
-    if (locsToWorkOn !== undefined && (neY > locsToWorkOn.neY || swY > locsToWorkOn.swY) && (neX < locsToWorkOn.neX || swX < locsToWorkOn.swX)) {
+    if (locsToWorkOn !== undefined && (neY < locsToWorkOn.neY && swY > locsToWorkOn.swY && neX < locsToWorkOn.neX && swX > locsToWorkOn.swX)) {
         return true;
     } else {
         return false;
